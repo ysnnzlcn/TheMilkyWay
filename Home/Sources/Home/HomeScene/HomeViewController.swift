@@ -5,8 +5,8 @@
 //  Created by Yasin Nazlican on 18.11.2021.
 //
 
-import UIKit
 import CoreUI
+import UIKit
 
 public final class HomeViewController: UIViewController {
 
