@@ -49,11 +49,15 @@ extension ImageDetailsViewModel {
     }
 
     private var descriptionText: NSAttributedString {
-        .init(
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.57
+
+        return .init(
             string: imageModel.info.first?.imageDescription ?? "No description provided.",
             attributes: [
                 .foregroundColor: UIColor.primaryTextColor,
-                .font: UIFont.appFontRegular(16)
+                .font: UIFont.appFontRegular(16),
+                .paragraphStyle: paragraphStyle
             ]
         )
     }

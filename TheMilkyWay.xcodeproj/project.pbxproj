@@ -104,7 +104,6 @@
 				848A458A2745567400F3D2CE /* TheMilkyWayTests */,
 				848A45942745567400F3D2CE /* TheMilkyWayUITests */,
 				848A45722745567200F3D2CE /* Products */,
-				84F4582E27455D1300A8A7C2 /* Frameworks */,
 				848A45BA27455CC500F3D2CE /* Core */,
 				84877BF227468B6A000311FC /* CoreUI */,
 				84877BEF274684C9000311FC /* Home */,
@@ -145,13 +144,6 @@
 				848A45972745567400F3D2CE /* TheMilkyWayUITestsLaunchTests.swift */,
 			);
 			path = TheMilkyWayUITests;
-			sourceTree = "<group>";
-		};
-		84F4582E27455D1300A8A7C2 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		84F4583127455E4900A8A7C2 /* Utils */ = {
