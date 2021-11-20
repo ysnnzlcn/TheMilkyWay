@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setup() {
         let window = UIWindow()
-        appCoordinator = AppCoordinator(window: window, service: MockNASAServices())
+        appCoordinator = AppCoordinator(window: window, service: RestNASAServices())
         /// Configure app by selection REST or MOCK services.
         self.window = window
         appCoordinator.start()
