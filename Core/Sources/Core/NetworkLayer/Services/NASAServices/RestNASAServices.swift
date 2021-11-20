@@ -22,7 +22,8 @@ public struct RestNASAServices: NASAServices {
 
     // MARK: Protocol Conformance
 
-    public func searchImages(with text: String) -> AnyPublisher<[NASAImage], NetworkError> {
-        return Empty(completeImmediately: false).eraseToAnyPublisher() /// Will be updated.
+    public func searchImages() -> AnyPublisher<NASAImageResponse, NetworkError> {
+        let target: NASANetworkTarget = .searchImages(key: "\"\"") /// "" means search for all.
+        return networkManager.sendRequest(type: NASAImageResponse.self, target: target)
     }
 }

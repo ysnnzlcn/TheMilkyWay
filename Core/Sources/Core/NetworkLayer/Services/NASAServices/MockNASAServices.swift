@@ -12,7 +12,7 @@ public struct MockNASAServices: NASAServices {
 
     // MARK: Protocol Conformance
 
-    public func searchImages(with text: String) -> AnyPublisher<[NASAImage], NetworkError> {
+    public func searchImages() -> AnyPublisher<NASAImageResponse, NetworkError> {
         return Empty(completeImmediately: false).eraseToAnyPublisher() /// Will be updated.
     }
 }

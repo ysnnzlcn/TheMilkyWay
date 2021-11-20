@@ -18,12 +18,12 @@ extension NASANetworkTarget: NetworkTarget {
         Configuration.current.baseUrl
     }
 
-    public var path: URL {
+    public var url: URL {
         var path = ""
 
         switch self {
-        case .searchImages(let key):
-            path = "search?q=\(key)"
+        case .searchImages:
+            path = "search"
         }
 
         guard let url = URL(string: baseURL.absoluteString + path) else {
@@ -50,6 +50,13 @@ extension NASANetworkTarget: NetworkTarget {
         switch self {
         case .searchImages:
             return nil
+        }
+    }
+
+    public var queryItems: [URLQueryItem] {
+        switch self {
+        case .searchImages(let text):
+            return [.init(name: "q", value: text)]
         }
     }
 }

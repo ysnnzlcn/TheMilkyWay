@@ -10,5 +10,5 @@ import Combine
 
 public protocol NASAServices {
 
-    func searchImages(with text: String) -> AnyPublisher<[NASAImage], NetworkError>
+    func searchImages() -> AnyPublisher<NASAImageResponse, NetworkError>
 }

@@ -7,29 +7,17 @@
 
 import UIKit
 
-/// I know that i was suppose to use Helvatica like in the Figma
-/// but wanted to make it a little nicer by using poppins font.
-
-public enum PoppinsFontTypes: String {
-
-    case Black, Bold, ExtraBold, ExtraLight, Light, Medium, Regular, Semibold, Thin
-
-    func font(size: CGFloat) -> UIFont {
-        UIFont(name: "Poppins-\(self.rawValue)", size: size) ?? .systemFont(ofSize: size)
-    }
-}
-
 public extension UIFont {
 
-    static func poppins(type: PoppinsFontTypes, size: CGFloat) -> UIFont {
-        type.font(size: size)
+    static func appFont(size: CGFloat, weight: UIFont.Weight) -> UIFont {
+        .systemFont(ofSize: size, weight: weight)
     }
 
-    static func boldPoppins(_ size: CGFloat) -> UIFont {
-        .poppins(type: .Bold, size: size)
+    static func appFontBold(_ size: CGFloat) -> UIFont {
+        .systemFont(ofSize: size, weight: .bold)
     }
 
-    static func regularPoppins(_ size: CGFloat) -> UIFont {
-        .poppins(type: .Regular, size: size)
+    static func appFontRegular(_ size: CGFloat) -> UIFont {
+        .systemFont(ofSize: size, weight: .regular)
     }
 }

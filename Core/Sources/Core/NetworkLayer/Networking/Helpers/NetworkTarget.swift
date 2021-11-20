@@ -13,7 +13,7 @@ public protocol NetworkTarget {
     var baseURL: URL { get }
 
     /// The path to be appended to `baseURL` to form the full `URL`.
-    var path: URL { get }
+    var url: URL { get }
 
     /// To set timeout for each request.
     var requestTimeout: Float? { get }
@@ -26,6 +26,9 @@ public protocol NetworkTarget {
 
     /// The body to be used in the target.
     var body: Data? { get }
+
+    /// Query items to be used in request.
+    var queryItems: [URLQueryItem] { get }
 }
 
 extension NetworkTarget {
