@@ -12,6 +12,7 @@ import UIKit
 fileprivate enum HomeControllers {
 
     case home
+    case imageDetail(_ image: NASAImage)
 }
 
 public final class HomeCoordinator: Coordinator {
@@ -36,7 +37,23 @@ public final class HomeCoordinator: Coordinator {
         case .home:
             let viewModel = HomeViewModel(service: RestNASAServices())
             let controller = HomeViewController(viewModel: viewModel)
+            controller.delegate = self
             return controller
+
+        case .imageDetail(let image):
+            return UIViewController()
         }
+    }
+
+    private func navigateTo(type: HomeControllers) {
+        let controller = makeController(type: type)
+        rootViewController.pushViewController(controller, animated: true)
+    }
+}
+
+extension HomeCoordinator: HomeViewControllerCoordinatorDelegate {
+
+    public func homeViewControllerDidSelect(_ sender: HomeViewController, image: NASAImage) {
+        navigateTo(type: .imageDetail(image))
     }
 }

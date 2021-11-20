@@ -5,6 +5,7 @@
 //  Created by Yasin Nazlican on 19.11.2021.
 //
 
+import Combine
 import CoreUI
 import UIKit
 
@@ -13,6 +14,7 @@ final class HomeTableViewDataSource: BaseDiffableDataSource<HomeCellType> {
     // MARK: Private Variables
 
     private let viewModel: HomeViewModel
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: Life-Cycle
 
@@ -26,6 +28,17 @@ final class HomeTableViewDataSource: BaseDiffableDataSource<HomeCellType> {
                 return imageCell
             }
         }
+        bindViewModel()
+    }
+
+    private func bindViewModel() {
+        viewModel.$items
+            .receive(on: RunLoop.main)
+            .map { $0.map { HomeTableViewDataSource.Item(cell: .imageCell($0)) } }
+            .sink(receiveValue: { [weak self] items in
+                self?.update(items: items)
+            })
+            .store(in: &cancellables)
     }
 }
 

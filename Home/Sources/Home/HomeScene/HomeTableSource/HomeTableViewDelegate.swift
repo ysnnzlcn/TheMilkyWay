@@ -27,6 +27,6 @@ final public class HomeTableViewDelegate: NSObject {
 extension HomeTableViewDelegate: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        viewModel.itemSelected(at: indexPath.row)
     }
 }

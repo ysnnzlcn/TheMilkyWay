@@ -6,8 +6,17 @@
 //
 
 import Combine
+import Core
 import CoreUI
 import UIKit
+
+public protocol HomeViewControllerCoordinatorDelegate: AnyObject {
+
+    func homeViewControllerDidSelect(
+        _ sender: HomeViewController,
+        image: NASAImage
+    )
+}
 
 public final class HomeViewController: UIViewController {
 
@@ -26,6 +35,10 @@ public final class HomeViewController: UIViewController {
         )
         return tableView
     }()
+
+    // MARK: Public Variables
+
+    public weak var delegate: HomeViewControllerCoordinatorDelegate?
 
     // MARK: Private Variables
 
@@ -81,12 +94,30 @@ public final class HomeViewController: UIViewController {
     // MARK: Setup ViewModel
 
     private func setupViewModel() {
-        viewModel.$items
+        let stateValueHandler = { [weak self] (state: HomeViewModelState) in
+            guard let self = self else { return }
+            switch state {
+            case .toggleLoading(let show):
+                GlobalLoadingView.simple(.primaryTextColor).toggle(show: show, on: self)
+
+            case .itemSelected(let item):
+                self.delegate?.homeViewControllerDidSelect(self, image: item)
+
+            case .error(let error):
+                GlobalAlert.alert(
+                    title: Constants.Alert.title,
+                    message: error,
+                    action: (
+                        Constants.Alert.actionTitle,
+                        { self.viewModel.didLoad() }
+                    )
+                ).show(on: self)
+            }
+        }
+
+        viewModel.$state
             .receive(on: RunLoop.main)
-            .map { $0.map { HomeTableViewDataSource.Item(cell: .imageCell($0)) } }
-            .sink(receiveValue: { [weak self] items in
-                self?.tableDataSource.update(items: items)
-            })
+            .sink(receiveValue: stateValueHandler)
             .store(in: &cancellables)
     }
 }
@@ -109,6 +140,12 @@ extension HomeViewController {
             static let separatorStyle: UITableViewCell.SeparatorStyle = .none
             static let backgroundColor: UIColor = .backgroundColor
             static let alwaysBounceVertical = true
+        }
+
+        enum Alert {
+
+            static let title = "That didn’t work!"
+            static let actionTitle = "Retry"
         }
     }
 }

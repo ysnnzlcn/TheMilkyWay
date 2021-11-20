@@ -8,10 +8,10 @@
 import Combine
 import Core
 
-enum HomeViewModelState: Equatable {
+enum HomeViewModelState {
 
-    case loading
-    case finishedLoading
+    case toggleLoading(_ show: Bool)
+    case itemSelected(_ item: NASAImage)
     case error(_ error: String)
 }
 
@@ -25,7 +25,7 @@ public final class HomeViewModel {
     // MARK: Public Variables
 
     @Published private(set) var items = [ImageTableCellViewModel]()
-    @Published private(set) var state: HomeViewModelState = .loading
+    @Published private(set) var state: HomeViewModelState = .toggleLoading(false)
 
     // MARK: Life-Cycle
 
@@ -38,6 +38,10 @@ public final class HomeViewModel {
     public func didLoad() {
         getImages()
     }
+
+    func itemSelected(at index: Int) {
+        state = .itemSelected(items[index].imageModel)
+    }
 }
 
 // MARK: Networking
@@ -45,7 +49,7 @@ public final class HomeViewModel {
 extension HomeViewModel {
 
     private func getImages() {
-        state = .loading
+        state = .toggleLoading(true)
         service
             .searchImages()
             .sink(receiveCompletion: { [weak self] completion in
@@ -54,7 +58,7 @@ extension HomeViewModel {
                     self?.state = .error(error.customDescription)
 
                 case .finished:
-                    self?.state = .finishedLoading
+                    self?.state = .toggleLoading(false)
                 }
             }, receiveValue: { [weak self] response in
                 self?.items = response.collection.items.map { ImageTableCellViewModel(model: $0) }

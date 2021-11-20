@@ -38,7 +38,7 @@ public enum GlobalLoadingView {
     }
 
     private func addLoadingView(to superView: UIView, tintColor: UIColor) {
-        /// Create loading view and add to hierarcy.
+        /// Create loading view and add to hierarchy.
         let loadingView = LoadingView(activityColor: tintColor)
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         superView.addSubview(loadingView)

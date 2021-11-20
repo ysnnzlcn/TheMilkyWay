@@ -11,15 +11,9 @@ import UIKit
 
 final class ImageTableCellViewModel {
 
-    // MARK: Private Constants
-
-    private let imageModel: NASAImage
-    private let subtitleAttributes: [NSAttributedString.Key: Any]  = [
-        .foregroundColor: UIColor.secondaryTextColor,
-        .font: UIFont.appFont(size: 14, weight: .regular)
-    ]
-
     // MARK: Public Variables
+
+    public let imageModel: NASAImage
 
     var imageURL: URL? {
         URL(string: imageModel.links.first?.percentageEncodedHref ?? "")
@@ -42,6 +36,11 @@ final class ImageTableCellViewModel {
     }
 
     // MARK: Private Read-Onlys
+
+    private let subtitleAttributes: [NSAttributedString.Key: Any]  = [
+        .foregroundColor: UIColor.secondaryTextColor,
+        .font: UIFont.appFont(size: 14, weight: .regular)
+    ]
 
     private var titleText: NSAttributedString {
         .init(
