@@ -10,18 +10,17 @@ import Foundation
 
 public class MockNASAServices: NASAServices {
 
-    // MARK: Public Variables
-    public var getCallsCount: Int = 0
-    public var getResult: Result<NASAImageResponse, NetworkError> = .failure(NetworkError.mock())
-
     // MARK: Life-Cycle
 
     public init() { }
 
     // MARK: Protocol Conformance
 
+    public var searchImagesCallsCount: Int = 0
+    public var searchImagesResult: Result<NASAImageResponse, NetworkError> = .success(NASAImageResponse.mock)
+
     public func searchImages() -> AnyPublisher<NASAImageResponse, NetworkError> {
-        getCallsCount += 1
-        return getResult.publisher.eraseToAnyPublisher()
+        searchImagesCallsCount += 1
+        return searchImagesResult.publisher.eraseToAnyPublisher()
     }
 }

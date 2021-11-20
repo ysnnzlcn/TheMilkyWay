@@ -9,7 +9,7 @@ import Combine
 import CoreUI
 import UIKit
 
-final class ImageDetailsTableDataSource: BaseDiffableDataSource<ImageDetailsCellType> {
+public final class ImageDetailsTableDataSource: BaseDiffableDataSource<ImageDetailsCellType> {
 
     // MARK: Private Variables
 
@@ -53,7 +53,7 @@ final class ImageDetailsTableDataSource: BaseDiffableDataSource<ImageDetailsCell
 
 // MARK: Cell Types
 
-enum ImageDetailsCellType {
+public enum ImageDetailsCellType: Equatable {
 
     case imageHeaderCell(_ url: String?)
     case plainTextCell(_ text: NSAttributedString)

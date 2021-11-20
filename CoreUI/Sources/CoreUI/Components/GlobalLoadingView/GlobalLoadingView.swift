@@ -12,7 +12,7 @@ public enum GlobalLoadingView {
 
     // MARK: Cases
 
-    case simple(_ tintColor: UIColor)
+    case simple(_ tintColor: UIColor = .primaryTextColor)
 
 
     // MARK: Public Methods

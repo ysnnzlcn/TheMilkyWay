@@ -95,7 +95,7 @@ public final class HomeViewController: UIViewController {
             guard let self = self else { return }
             switch state {
             case .toggleLoading(let show):
-                GlobalLoadingView.simple(.primaryTextColor).toggle(show: show, on: self)
+                GlobalLoadingView.simple().toggle(show: show, on: self)
 
             case .itemSelected(let item):
                 self.delegate?.homeViewControllerDidSelect(self, image: item)

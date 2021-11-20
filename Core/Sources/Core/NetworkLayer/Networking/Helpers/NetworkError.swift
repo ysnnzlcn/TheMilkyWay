@@ -27,8 +27,8 @@ public enum NetworkError: Error {
         }
     }
 
-    public static func mock() -> NetworkError {
-        .error(NSError(domain: "", code: -1, userInfo: nil))
+    public static func mock(error reason: String = "Mock Error") -> NetworkError {
+        .error(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: reason]))
     }
 }
 

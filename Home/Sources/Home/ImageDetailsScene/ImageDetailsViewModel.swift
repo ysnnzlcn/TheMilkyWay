@@ -20,7 +20,7 @@ public final class ImageDetailsViewModel {
 
     // MARK: Public Variables
 
-    @Published private(set) var items = [ImageDetailsTableDataSource.Item]()
+    @Published public private(set) var items = [ImageDetailsTableDataSource.Item]()
     public var imageTitle: String { imageModel.info.first?.title ?? "" }
 
     // MARK: Life-Cycle

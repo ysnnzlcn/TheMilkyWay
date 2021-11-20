@@ -8,7 +8,7 @@
 import Combine
 import Core
 
-enum HomeViewModelState {
+public enum HomeViewModelState {
 
     case toggleLoading(_ show: Bool)
     case itemSelected(_ item: NASAImage)
@@ -24,8 +24,8 @@ public final class HomeViewModel {
 
     // MARK: Public Variables
 
-    @Published private(set) var items = [NASAImage]()
-    @Published private(set) var state: HomeViewModelState = .toggleLoading(false)
+    @Published public private(set) var items = [NASAImage]()
+    @Published public private(set) var state: HomeViewModelState = .toggleLoading(false)
 
     // MARK: Life-Cycle
 
@@ -39,7 +39,7 @@ public final class HomeViewModel {
         getImages()
     }
 
-    func itemSelected(at index: Int) {
+    public func itemSelected(at index: Int) {
         state = .itemSelected(items[index])
     }
 }
