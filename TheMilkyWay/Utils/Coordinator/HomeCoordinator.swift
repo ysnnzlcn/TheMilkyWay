@@ -17,14 +17,16 @@ fileprivate enum HomeControllers {
 
 public final class HomeCoordinator: Coordinator {
 
-    // MARK: Properties
+    // MARK: Public Variables
 
     public let rootViewController: UINavigationController
+    public let service: NASAServices
 
     // MARK: Life-Cycle
 
-    public init(rootViewController: UINavigationController) {
+    public init(rootViewController: UINavigationController, service: NASAServices) {
         self.rootViewController = rootViewController
+        self.service = service
     }
 
     public override func start() {
@@ -35,13 +37,15 @@ public final class HomeCoordinator: Coordinator {
     private func makeController(type: HomeControllers) -> UIViewController {
         switch type {
         case .home:
-            let viewModel = HomeViewModel(service: RestNASAServices())
+            let viewModel = HomeViewModel(service: service)
             let controller = HomeViewController(viewModel: viewModel)
             controller.delegate = self
             return controller
 
         case .imageDetail(let image):
-            return UIViewController()
+            let viewModel = ImageDetailsViewModel(service: service, imageModel: image)
+            let controller = ImageDetailsViewController(viewModel: viewModel)
+            return controller
         }
     }
 

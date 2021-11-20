@@ -24,7 +24,7 @@ public final class HomeViewModel {
 
     // MARK: Public Variables
 
-    @Published private(set) var items = [ImageTableCellViewModel]()
+    @Published private(set) var items = [NASAImage]()
     @Published private(set) var state: HomeViewModelState = .toggleLoading(false)
 
     // MARK: Life-Cycle
@@ -40,7 +40,7 @@ public final class HomeViewModel {
     }
 
     func itemSelected(at index: Int) {
-        state = .itemSelected(items[index].imageModel)
+        state = .itemSelected(items[index])
     }
 }
 
@@ -61,7 +61,7 @@ extension HomeViewModel {
                     self?.state = .toggleLoading(false)
                 }
             }, receiveValue: { [weak self] response in
-                self?.items = response.collection.items.map { ImageTableCellViewModel(model: $0) }
+                self?.items = response.collection.items
             })
             .store(in: &cancellables)
     }

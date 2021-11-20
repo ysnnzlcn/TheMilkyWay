@@ -6,10 +6,9 @@
 //
 
 import Core
-import Foundation
 import UIKit
 
-final class ImageTableCellViewModel {
+public final class ImageTableCellViewModel {
 
     // MARK: Public Variables
 
@@ -19,7 +18,7 @@ final class ImageTableCellViewModel {
         URL(string: imageModel.links.first?.percentageEncodedHref ?? "")
     }
 
-    var text: NSAttributedString {
+    public var text: NSAttributedString {
         let text = NSMutableAttributedString()
         text.append(titleText)
         text.append(NSAttributedString(string: "\n"))
@@ -31,11 +30,11 @@ final class ImageTableCellViewModel {
 
     // MARK: Life-Cycle
 
-    init(model: NASAImage) {
-        imageModel = model
+    public init(imageModel: NASAImage) {
+        self.imageModel = imageModel
     }
 
-    // MARK: Private Read-Onlys
+    // MARK: Private Read-Only
 
     private let subtitleAttributes: [NSAttributedString.Key: Any]  = [
         .foregroundColor: UIColor.secondaryTextColor,

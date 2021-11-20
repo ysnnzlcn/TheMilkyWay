@@ -59,25 +59,26 @@ public struct NASAImageInfo: Decodable {
     public let title: String
     public let photographer: String?
     public let dateCreated: String
-    public let description: String
+    public let imageDescription: String
 
     public init(
         center: String,
         title: String,
         photographer: String?,
         dateCreated: String,
-        description: String
+        imageDescription: String
     ) {
         self.center = center
         self.title = title
         self.photographer = photographer
         self.dateCreated = dateCreated
-        self.description = description
+        self.imageDescription = imageDescription
     }
 
     private enum CodingKeys: String, CodingKey {
 
-        case center, title, photographer, description
+        case center, title, photographer
+        case imageDescription = "description"
         case dateCreated = "date_created"
     }
 }
@@ -112,7 +113,7 @@ public extension NASAImageResponse {
             title: "ARC-2002-ACD02-0056-22",
             photographer: "Tom Trower",
             dateCreated: "2002-03-20T00:00:00Z",
-            description: "VSHAIP test in 7x10ft#1 W.T. (multiple model configruations) V-22 helicopter shipboard aerodynamic interaction program: L-R seated Allen Wadcox, (standind) Mark Betzina, seated in front of computer Gloria Yamauchi, in background Kurt Long."
+            imageDescription: "VSHAIP test in 7x10ft#1 W.T. (multiple model configruations) V-22 helicopter shipboard aerodynamic interaction program: L-R seated Allen Wadcox, (standind) Mark Betzina, seated in front of computer Gloria Yamauchi, in background Kurt Long."
         )
 
         let link = NASAImageLink(

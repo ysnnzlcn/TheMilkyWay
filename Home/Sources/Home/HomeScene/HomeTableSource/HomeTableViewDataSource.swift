@@ -34,7 +34,12 @@ final class HomeTableViewDataSource: BaseDiffableDataSource<HomeCellType> {
     private func bindViewModel() {
         viewModel.$items
             .receive(on: RunLoop.main)
-            .map { $0.map { HomeTableViewDataSource.Item(cell: .imageCell($0)) } }
+            .map { items in
+                return items.map {
+                    let cellViewModel = ImageTableCellViewModel(imageModel: $0)
+                    return HomeTableViewDataSource.Item(cell: .imageCell(cellViewModel))
+                }
+            }
             .sink(receiveValue: { [weak self] items in
                 self?.update(items: items)
             })

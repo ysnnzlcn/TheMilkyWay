@@ -17,9 +17,13 @@ final public class TemporaryImageCache {
 
     private let cache = NSCache<NSURL, UIImage>()
 
+    // MARK: Life-Cycle
+
+    public init() { }
+
     // MARK: Subscript
 
-    subscript(_ key: URL) -> UIImage? {
+    public subscript(_ key: URL) -> UIImage? {
         get {
             cache.object(forKey: key as NSURL)
         }

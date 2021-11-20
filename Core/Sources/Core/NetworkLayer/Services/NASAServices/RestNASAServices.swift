@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-public struct RestNASAServices: NASAServices {
+public class RestNASAServices: NASAServices {
 
     // MARK: Private Variables
 

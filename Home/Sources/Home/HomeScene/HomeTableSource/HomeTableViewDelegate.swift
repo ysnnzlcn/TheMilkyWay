@@ -5,7 +5,6 @@
 //  Created by Yasin Nazlican on 19.11.2021.
 //
 
-import CoreUI
 import UIKit
 
 final public class HomeTableViewDelegate: NSObject {

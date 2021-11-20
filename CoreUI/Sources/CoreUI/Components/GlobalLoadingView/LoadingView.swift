@@ -46,7 +46,7 @@ class LoadingView: UIView {
         NSLayoutConstraint.activate([
             activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ]
+            ]
         )
     }
 }

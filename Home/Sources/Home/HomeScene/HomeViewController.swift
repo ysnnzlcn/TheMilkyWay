@@ -30,7 +30,7 @@ public final class HomeViewController: UIViewController {
         tableView.alwaysBounceVertical = Constants.TableView.alwaysBounceVertical
         tableView.keyboardDismissMode = Constants.TableView.keyboardDismissMode
         tableView.register(
-            UINib(nibName: ImageTableViewCell.reuseIdentifier, bundle: .module),
+            UINib(nibName: ImageTableViewCell.reuseIdentifier, bundle: CoreUIModule.module),
             forCellReuseIdentifier: ImageTableViewCell.reuseIdentifier
         )
         return tableView
@@ -65,13 +65,17 @@ public final class HomeViewController: UIViewController {
         viewModel.didLoad()
     }
 
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateNavigationBarTitleStyle(largeTitles: true)
+    }
+
     // MARK: Setup Views
 
     private func setupViews() {
         /// Setup main
         title = Constants.MainView.title
         view.backgroundColor = Constants.MainView.backgroundColor
-        navigationController?.navigationBar.prefersLargeTitles = true
 
         /// Setup table view
         tableView.dataSource = tableDataSource
@@ -81,14 +85,7 @@ public final class HomeViewController: UIViewController {
         view.addSubview(tableView)
 
         /// Add Constraints
-        NSLayoutConstraint.activate(
-            [
-                tableView.topAnchor.constraint(equalTo: view.topAnchor),
-                tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-                tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ]
-        )
+        tableView.pinToSuperView()
     }
 
     // MARK: Setup ViewModel
@@ -102,6 +99,7 @@ public final class HomeViewController: UIViewController {
 
             case .itemSelected(let item):
                 self.delegate?.homeViewControllerDidSelect(self, image: item)
+                self.updateNavigationBarTitleStyle(largeTitles: false)
 
             case .error(let error):
                 GlobalAlert.alert(
@@ -120,13 +118,17 @@ public final class HomeViewController: UIViewController {
             .sink(receiveValue: stateValueHandler)
             .store(in: &cancellables)
     }
+
+    private func updateNavigationBarTitleStyle(largeTitles: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = largeTitles
+    }
 }
+
+// MARK: Constants
 
 extension HomeViewController {
 
     private enum Constants {
-
-        static let margins: CGFloat = 0.0
 
         enum MainView {
 

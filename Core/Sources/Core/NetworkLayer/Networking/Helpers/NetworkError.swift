@@ -26,4 +26,9 @@ public enum NetworkError: Error {
             return response.reason
         }
     }
+
+    public static func mock() -> NetworkError {
+        .error(NSError(domain: "", code: -1, userInfo: nil))
+    }
 }
+

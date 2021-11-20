@@ -44,12 +44,6 @@ public enum GlobalLoadingView {
         superView.addSubview(loadingView)
 
         /// Add constraints.
-        NSLayoutConstraint.activate([
-                loadingView.topAnchor.constraint(equalTo: superView.topAnchor),
-                loadingView.leftAnchor.constraint(equalTo: superView.leftAnchor),
-                loadingView.rightAnchor.constraint(equalTo: superView.rightAnchor),
-                loadingView.bottomAnchor.constraint(equalTo: superView.bottomAnchor)
-            ]
-        )
+        loadingView.pinToSuperView()
     }
 }

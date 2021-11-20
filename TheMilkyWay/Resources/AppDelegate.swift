@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Core
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,7 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setup() {
         let window = UIWindow()
-        appCoordinator = AppCoordinator(window: window)
+        appCoordinator = AppCoordinator(window: window, service: MockNASAServices())
+        /// Configure app by selection REST or MOCK services.
         self.window = window
         appCoordinator.start()
     }
