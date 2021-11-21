@@ -40,19 +40,20 @@ public final class NetworkManager: Requestable {
         return URLSession.shared
             .dataTaskPublisher(for: makeRequest(from: target))
             .mapError { NetworkError.error($0) }
-            .flatMap({ result -> AnyPublisher<T, NetworkError> in
-                guard let urlResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(urlResponse.statusCode) else {
-                          return Just(result.data)
-                              .decode(type: NetworkErrorResponse.self, decoder: JSONDecoder())
-                              .tryMap({ errorModel in throw NetworkError.internalError(errorModel) })
-                              .mapError { NetworkError.error($0) }
-                              .eraseToAnyPublisher()
-                      }
-                return Just(result.data)
-                    .decode(type: T.self, decoder: JSONDecoder())
-                    .mapError { NetworkError.error($0) }
-                    .eraseToAnyPublisher()
+            .flatMap({ [weak self] result -> AnyPublisher<T, NetworkError> in
+                guard let self = self, let urlResponse = result.response as? HTTPURLResponse else {
+                    return Fail(error: .serverError).eraseToAnyPublisher()
+                }
+
+                if self.isResponseSuccessful(urlResponse.statusCode) {
+                    return self.decode(type: T.self, result.data)
+                } else {
+                    return self.decode(type: NetworkErrorResponse.self, result.data)
+                        .flatMap({ error in
+                            Fail(error: .internalError(error)).eraseToAnyPublisher()
+                        })
+                        .eraseToAnyPublisher()
+                }
             })
             .eraseToAnyPublisher()
     }
@@ -70,5 +71,16 @@ public final class NetworkManager: Requestable {
         urlRequest.allHTTPHeaderFields = target.headers ?? [:]
         urlRequest.httpBody = target.body
         return urlRequest
+    }
+
+    private func isResponseSuccessful(_ statusCode: Int) -> Bool {
+        (200...299).contains(statusCode)
+    }
+
+    private func decode<T: Decodable>(type: T.Type, _ data: Data) -> AnyPublisher<T, NetworkError> {
+        return Just(data)
+            .decode(type: type, decoder: JSONDecoder())
+            .mapError { NetworkError.error($0) }
+            .eraseToAnyPublisher()
     }
 }
