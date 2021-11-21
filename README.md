@@ -24,7 +24,7 @@ This is a sample iOS project created using NASA search image API.
 
 ## Design choices
 
-I choose **MVVM** for this sample project for testability and scalability. Preferred the **Coordinator Pattern** to be able to easily handle navigation.
+I choosed **MVVM** for this sample project for testability and scalability. Preferred the **Coordinator Pattern** to be able to easily handle navigation.
 **Modular Architecture** choice is made to be able to define development areas and responsibilities clearer.
 
 * **MVVM**: 
