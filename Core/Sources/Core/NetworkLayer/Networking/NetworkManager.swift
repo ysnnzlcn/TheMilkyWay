@@ -45,7 +45,7 @@ public final class NetworkManager: Requestable {
                     return Fail(error: .serverError).eraseToAnyPublisher()
                 }
 
-                if self.isResponseSuccessful(urlResponse.statusCode) {
+                if urlResponse.isSuccessful {
                     return self.decode(type: T.self, result.data)
                 } else {
                     return self.decode(type: NetworkErrorResponse.self, result.data)
@@ -73,14 +73,17 @@ public final class NetworkManager: Requestable {
         return urlRequest
     }
 
-    private func isResponseSuccessful(_ statusCode: Int) -> Bool {
-        (200...299).contains(statusCode)
-    }
-
     private func decode<T: Decodable>(type: T.Type, _ data: Data) -> AnyPublisher<T, NetworkError> {
         return Just(data)
             .decode(type: type, decoder: JSONDecoder())
             .mapError { NetworkError.error($0) }
             .eraseToAnyPublisher()
+    }
+}
+
+fileprivate extension HTTPURLResponse {
+
+    var isSuccessful: Bool {
+        (200...299).contains(statusCode)
     }
 }

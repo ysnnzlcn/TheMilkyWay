@@ -12,11 +12,11 @@ public class RestNASAServices: NASAServices {
 
     // MARK: Private Variables
 
-    private let networkManager: NetworkManager
+    private let networkManager: Requestable
 
     // MARK: Life-Cycle
 
-    public init(networkManager: NetworkManager = .shared) {
+    public init(networkManager: Requestable = NetworkManager.shared) {
         self.networkManager = networkManager
     }
 
