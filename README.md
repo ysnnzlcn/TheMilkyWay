@@ -5,10 +5,13 @@
 * [Technologies](#technologies)
 * [Architecture](#architecture)
 * [Design choices](#design-choices)
+* [Unit tests](#unit-tests)
+* [Dependency injection](#dependency-injection)
 
 ## General info
 
 This is a sample iOS project created using NASA search image API.
+
 
 ## Technologies
 
@@ -17,10 +20,12 @@ This is a sample iOS project created using NASA search image API.
 * UIKit
 * Combine
 
+
 ## Architecture
 
 * MVVM-C
 * Modular Architecture
+
 
 ## Design choices
 
@@ -39,3 +44,17 @@ I choosed **MVVM** for this sample project for testability and scalability. Pref
   * Less build-time when compiling after a change is made.
   * Clearer development areas/responsibilities.
   * Isolation of changes.
+
+
+## Unit tests
+
+  Unit tests can be found under the "\(Module)Tests" directory in each module.
+
+## Dependency injection
+
+ 1. **NetworkManager** conforms to **Requestable** protocol which can be easily replaced with another source,
+ 2. **RestNasaServices** conforms to **NasaServices** protocol which can be replaced by mock or real service or local source anytime and it has contractor injection of **Requestable** to be able to change the source easily
+ 3. **ViewModels** require contractor injection of **NASAService** protocol which can be **Mock** or **Rest** or any other source at any time which allows them to be tested easily.
+ 4. **ViewControllers** require contractor injection of their **ViewModels** which needs to be set in coordinators,
+ 5. **Coordinator** requires contractor injection of **NASAServices** which needs to be set in **AppCoordinator**,
+ 6. **AppCoordinator** also requires contractor injection of **NASAServices**, so we can run our app entirely on **Mock** or **Rest** services.
