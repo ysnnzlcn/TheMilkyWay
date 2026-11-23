@@ -12,11 +12,14 @@
 
 This is a sample iOS project created using NASA search image API.
 
+> **Migration in progress:** the app is moving from UIKit, MVVM-C and Combine to SwiftUI, TCA and Swift Concurrency.
+> Open `TheMilkyWay.xcworkspace` with Xcode 27.
+
 
 ## Technologies
 
-* iOS14>
-* Swift 5
+* iOS 27+
+* Swift 6.4 tools (Swift 5 language mode during the migration)
 * UIKit
 * Combine
 

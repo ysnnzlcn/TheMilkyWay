@@ -15,7 +15,10 @@ public enum NASANetworkTarget {
 extension NASANetworkTarget: NetworkTarget {
 
     public var baseURL: URL {
-        Configuration.current.baseUrl
+        guard let url = URL(string: "https://images-api.nasa.gov/") else {
+            fatalError("Please provide a valid base url.")
+        }
+        return url
     }
 
     public var url: URL {
