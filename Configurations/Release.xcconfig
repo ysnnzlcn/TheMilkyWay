@@ -1,0 +1,9 @@
+//
+//  Release.xcconfig
+//  TheMilkyWay
+//
+//  The Release build. Only what differs per build is here.
+//
+
+PRODUCT_BUNDLE_IDENTIFIER = com.yasinnazlican.TheMilkyWay
+INFOPLIST_KEY_CFBundleDisplayName = TheMilkyWay

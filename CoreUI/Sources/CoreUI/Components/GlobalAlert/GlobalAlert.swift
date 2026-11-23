@@ -35,7 +35,8 @@ public enum GlobalAlert {
     }
 
     public func show() {
-        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else { return }
+        let windowScene = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
+        guard let rootViewController = windowScene?.keyWindow?.rootViewController else { return }
         show(on: rootViewController)
     }
 

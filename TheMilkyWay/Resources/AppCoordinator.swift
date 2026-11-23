@@ -13,14 +13,12 @@ public final class AppCoordinator: Coordinator {
 
     // MARK: Public Properties
 
-    public let window: UIWindow
     public let service: NASAServices
     public private(set) lazy var rootViewController = UINavigationController()
 
     // MARK: Life-Cycle
 
-    public init(window: UIWindow, service: NASAServices) {
-        self.window = window
+    public init(service: NASAServices) {
         self.service = service
     }
 
@@ -31,8 +29,6 @@ public final class AppCoordinator: Coordinator {
             service: service
         )
         addChildCoordinator(homeCoordinator)
-        window.rootViewController = rootViewController
-        window.makeKeyAndVisible()
         homeCoordinator.start()
     }
 }

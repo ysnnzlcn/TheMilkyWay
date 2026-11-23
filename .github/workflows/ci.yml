@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-build-test:
+    runs-on: xcode-27
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Lint
+        run: swiftlint lint
+
+      - name: Pick simulator
+        run: |
+          id=$(xcrun simctl list devices available -j \
+            | jq -r '.devices | to_entries[] | select(.key | test("iOS-27-2")) | .value[]
+              | select(.name | startswith("iPhone")) | .udid' | head -1)
+          test -n "$id"
+          echo "SIMULATOR_ID=$id" >> "$GITHUB_ENV"
+
+      - name: Build and test
+        run: |
+          xcodebuild test \
+            -workspace TheMilkyWay.xcworkspace \
+            -scheme TheMilkyWayDebug \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            SWIFT_TREAT_WARNINGS_AS_ERRORS=YES \
+            GCC_TREAT_WARNINGS_AS_ERRORS=YES

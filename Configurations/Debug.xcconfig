@@ -1,0 +1,9 @@
+//
+//  Debug.xcconfig
+//  TheMilkyWay
+//
+//  The Debug build. Only what differs per build is here.
+//
+
+PRODUCT_BUNDLE_IDENTIFIER = com.yasinnazlican.TheMilkyWay.debug
+INFOPLIST_KEY_CFBundleDisplayName = TheMilkyWayDebug

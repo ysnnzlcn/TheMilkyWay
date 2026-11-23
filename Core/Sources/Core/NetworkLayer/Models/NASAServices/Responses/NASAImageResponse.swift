@@ -121,7 +121,9 @@ public extension NASAImageResponse {
                 title: "ARC-2002-ACD02-0056-22-\(index)",
                 photographer: "Tom Trower-\(index)",
                 dateCreated: "2002-03-20T00:00:00Z",
-                imageDescription: "VSHAIP test in 7x10ft#1 W.T. (multiple model configruations) V-22 helicopter shipboard aerodynamic interaction program: L-R seated Allen Wadcox, (standind) Mark Betzina, seated in front of computer Gloria Yamauchi, in background Kurt Long."
+                imageDescription: "VSHAIP test in 7x10ft#1 W.T. (multiple model configruations) V-22 helicopter "
+                    + "shipboard aerodynamic interaction program: L-R seated Allen Wadcox, (standind) Mark Betzina, "
+                    + "seated in front of computer Gloria Yamauchi, in background Kurt Long."
             )
 
             let link = NASAImageLink(
