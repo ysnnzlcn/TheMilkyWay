@@ -1,0 +1,102 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "generic.description" : {
+      "comment" : "Full-screen error: any failure that is not a lost connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong. Please try again."
+          }
+        }
+      }
+    },
+    "generic.title" : {
+      "comment" : "Full-screen error title when a screen couldn't load.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load this page"
+          }
+        }
+      }
+    },
+    "generic.toast" : {
+      "comment" : "Error toast for any failure that is not a lost connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong. Please try again."
+          }
+        }
+      }
+    },
+    "offline.description" : {
+      "comment" : "Full-screen error when the phone has no connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your internet connection and try again."
+          }
+        }
+      }
+    },
+    "offline.title" : {
+      "comment" : "Full-screen error title when the phone has no connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection"
+          }
+        }
+      }
+    },
+    "offline.toast" : {
+      "comment" : "Error toast when the phone has no connection.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're offline. Check your connection."
+          }
+        }
+      }
+    },
+    "retry" : {
+      "comment" : "Button on a full-screen error that loads the screen again.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
+    },
+    "timeout.description" : {
+      "comment" : "Full-screen error when the request took too long.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The connection is too slow. Please try again."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

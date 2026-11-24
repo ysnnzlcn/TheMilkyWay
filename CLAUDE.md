@@ -41,14 +41,24 @@ TheMilkyWay (app)   only target importing *Impl (as `private import`), wires it 
   ↑
 Home                image list and details screens
   ↑
-CoreUI              reusable UIKit components, error text
+CoreUI              DS tokens, SwiftUI components, image loader, error text (old UIKit components until removed)
 CoreAPI | Impl | Stubs   API protocols / NASA over URLSession / offline stubs
+CoreAssets          String Catalogs + `L10n`, `SystemImage`
 CoreBase            models, AppError, Log, Global… helpers (no dependencies)
 ```
 
 - Response models end in `DTO`, request models in `Request`. NASA's raw response shape stays inside `CoreAPIImpl`.
 - The API is chosen once at launch in `AppInterface.apiEnvironment(for:)`: every build uses NASA's live API.
-  Stubs serve tests and previews.
+  Stubs serve tests.
+- User-facing text comes from `L10n` (CoreAssets), never a literal in a view. One catalog per owner: `coreui`,
+  `errors` (read only by `AppError+Strings`), one per feature. Add the catalog entry, then its `L10n` accessor.
+- SF Symbols are `SystemImage` cases, drawn with `Image(systemImage:)` / `Label(_:systemImage:)`.
+- Views use `DS` tokens, never raw colors or sizes. Text uses `.textStyle(...)` (`DS.TextStyle`, the system font at
+  Dynamic Type sizes), never `.font(...)`.
+- Every screen sits in `BaseContentView`. A failed screen load shows `.headerMessage(...)` with "Try again"; other
+  errors show `.toast(model:)`. Toasts never have buttons.
+- Network images use `RemoteImage` (our `ImageLoader`), never `AsyncImage`.
+- Previews only for CoreUI components, not for screens.
 - Dates and other shown values are formatted once in CoreBase `Global…` helpers, never inline.
 - Log with `Log` from CoreBase, never `print`. Never log personal data.
 

@@ -13,7 +13,10 @@ public enum Log {
     public enum Category: String, Sendable {
         case app
         case home
+        /// Toasts and full-screen messages shown, with their text.
+        case messages
         case api
+        case images
     }
 
     public static func debug(_ message: String, _ category: Category, file: String = #fileID, line: Int = #line) {
