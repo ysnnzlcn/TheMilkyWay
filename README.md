@@ -99,12 +99,6 @@ Swift Testing throughout, with TCA's exhaustive `TestStore` for reducers and a `
 every reducer action, the network layer and NASA mapping (against a fixture trimmed from a real response), the
 SwiftData store (in memory and on disk), the image loader, tracking events and all strings.
 
-```bash
-xcodebuild test -workspace TheMilkyWay.xcworkspace -scheme TheMilkyWayDebug \
-  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' -skipMacroValidation
-swiftlint lint --strict
-```
-
 CI runs both on every pull request ([workflow](.github/workflows/ci.yml)).
 
 ## Credits
