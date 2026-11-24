@@ -1,0 +1,54 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "noResults.description" : {
+      "comment" : "Explore: shown when a search finds no images.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try a different search."
+          }
+        }
+      }
+    },
+    "noResults.title" : {
+      "comment" : "Explore: title when a search finds no images.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results"
+          }
+        }
+      }
+    },
+    "searchPrompt" : {
+      "comment" : "Explore: placeholder in the search field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search NASA images"
+          }
+        }
+      }
+    },
+    "title" : {
+      "comment" : "Explore: the screen's navigation title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

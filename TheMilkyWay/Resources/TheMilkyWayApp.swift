@@ -3,6 +3,7 @@
 //  TheMilkyWay
 //
 
+import ComposableArchitecture
 import CoreBase
 import SwiftUI
 
@@ -11,14 +12,22 @@ struct TheMilkyWayApp: App {
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    /// Created on first use, after `AppInterface.setup` in `init`.
+    static let appState = Store(initialState: AppState.State()) {
+        AppState()
+    }
+
     init() {
         AppInterface.setup(.current)
     }
 
     var body: some Scene {
         WindowGroup {
-            LegacyRootView()
-                .ignoresSafeArea()
+            // Tests in the app target launch the real app next to them; its work would then use dependencies in a
+            // test context. While tests run, the app shows nothing.
+            if TestContext.current == nil {
+                AppView(store: Self.appState)
+            }
         }
     }
 }

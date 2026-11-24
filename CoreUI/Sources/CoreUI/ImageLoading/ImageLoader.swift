@@ -23,10 +23,15 @@ public final class ImageLoader: Sendable {
         self.cache = cache
     }
 
+    /// The image already in memory, without waiting: a view coming back on screen shows it at once.
+    public func cachedImage(for url: URL, maxPixelSize: Int) -> UIImage? {
+        cache[Self.key(url, maxPixelSize)]
+    }
+
     /// The image at `url`, at most `maxPixelSize` pixels on its longer side. `nil` when it can't be loaded.
     @concurrent
     public func image(for url: URL, maxPixelSize: Int) async -> UIImage? {
-        let key = "\(maxPixelSize)|\(url.absoluteString)"
+        let key = Self.key(url, maxPixelSize)
         if let image = cache[key] { return image }
 
         do {
@@ -53,6 +58,10 @@ public final class ImageLoader: Sendable {
     }
 
     // MARK: Private
+
+    private static func key(_ url: URL, _ maxPixelSize: Int) -> String {
+        "\(maxPixelSize)|\(url.absoluteString)"
+    }
 
     /// Decodes straight to the smaller size, so a large photo never sits in memory at full size.
     static func downsample(_ data: Data, maxPixelSize: Int) -> UIImage? {

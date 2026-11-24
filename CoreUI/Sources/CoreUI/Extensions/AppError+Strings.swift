@@ -49,7 +49,4 @@ public extension AppError {
     }
 
     var isOffline: Bool { self == .api(.offline) }
-
-    /// The UIKit screens' alert text, until they move to SwiftUI.
-    var message: String { copy.description }
 }

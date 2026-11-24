@@ -29,6 +29,7 @@ enum AppInterface {
     static func setup(_ appEnvironment: AppEnvironment) {
         let apiManager = setupCoreAPIModule(apiEnvironment(for: appEnvironment))
         mainTargetImports = MainTargetImports(apiManager: apiManager)
+        setupExploreBaseModule()
         Log.info("Set up with \(apiEnvironment(for: appEnvironment)) API", .app)
     }
 }

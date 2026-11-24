@@ -24,6 +24,17 @@ struct L10nTests {
         #expect(!value.isEmpty)
     }
 
+    @Test(arguments: [
+        ("noResults.description", L10n.Explore.noResultsDescription),
+        ("noResults.title", L10n.Explore.noResultsTitle),
+        ("searchPrompt", L10n.Explore.searchPrompt),
+        ("title", L10n.Explore.title),
+    ])
+    func exploreStringsResolve(key: String, value: String) {
+        #expect(value != key)
+        #expect(!value.isEmpty)
+    }
+
     @Test func formatsInsertTheirArgument() {
         #expect(L10n.Coreui.toastErrorAnnouncement("Offline") == "Error, Offline")
     }

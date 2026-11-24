@@ -45,4 +45,9 @@ public enum DS {
         public static let toast: Duration = .seconds(4)
         public static let errorToast: Duration = .seconds(6)
     }
+
+    public enum Opacity {
+        /// Content behind a loading spinner.
+        public static let dimmed: Double = 0.4
+    }
 }

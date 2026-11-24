@@ -9,8 +9,8 @@ TheMilkyWay is a sample iOS app for browsing and searching NASA's image library
 
 ## Status
 
-The app is moving from UIKit and MVVM-C to SwiftUI and TCA. The current screens are UIKit, hosted by `LegacyRootView`
-until they are replaced, and still bind to their view models with Combine. Networking uses async/await.
+SwiftUI and TCA throughout, networking with async/await. Explore and Image details are built; Favorites (SwiftData)
+and an on-device AI explanation come next.
 
 ## Build
 
@@ -24,24 +24,28 @@ Open `TheMilkyWay.xcworkspace`, not the `.xcodeproj`: the workspace is what conn
 - App and test targets use synchronized folders, so new files need no project file edits.
 
 ```bash
-swiftlint
+swiftlint lint --strict
 xcodebuild -workspace TheMilkyWay.xcworkspace -scheme TheMilkyWayDebug \
-  -destination 'platform=iOS Simulator,name=iPhone 18 Pro Max' test
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro Max' -skipMacroValidation test
 ```
 
-CI runs SwiftLint, build and tests from `.github/workflows/ci.yml`, with compiler warnings as errors. SwiftLint
-warnings stay allowed until the UIKit code is replaced, then CI moves to `--strict`.
+CI runs strict SwiftLint, build and tests from `.github/workflows/ci.yml`. Compiler warnings are errors in our own
+code, set per target: `strict` swift settings in every `Package.swift` and the project's build settings. Never pass
+`SWIFT_TREAT_WARNINGS_AS_ERRORS` on the command line: it reaches TCA's packages and fails the build. A new package or
+target gets `swiftSettings: strict`.
 
 ## Modules
 
 Every module is a local Swift package, and packages reference each other with `../` paths.
 
 ```
-TheMilkyWay (app)   only target importing *Impl (as `private import`), wires it in AppInterface
+TheMilkyWay (app)   AppState root; only target importing *Impl (as `private import`), wires it in AppInterface
   ↑
-Home                image list and details screens
+ExploreBase         Explore: paged image grid with search
   ↑
-CoreUI              DS tokens, SwiftUI components, image loader, error text (old UIKit components until removed)
+ImageDetails        the image details screen, pushed from features
+  ↑
+CoreUI              DS tokens, SwiftUI components, image loader, error text
 CoreAPI | Impl | Stubs   API protocols / NASA over URLSession / offline stubs
 CoreAssets          String Catalogs + `L10n`, `SystemImage`
 CoreBase            models, AppError, Log, Global… helpers (no dependencies)
@@ -55,7 +59,8 @@ CoreBase            models, AppError, Log, Global… helpers (no dependencies)
 - SF Symbols are `SystemImage` cases, drawn with `Image(systemImage:)` / `Label(_:systemImage:)`.
 - Views use `DS` tokens, never raw colors or sizes. Text uses `.textStyle(...)` (`DS.TextStyle`, the system font at
   Dynamic Type sizes), never `.font(...)`.
-- Every screen sits in `BaseContentView`. A failed screen load shows `.headerMessage(...)` with "Try again"; other
+- Every screen sits in `BaseContentView(mode:)`; `.loading` dims the content under a spinner and blocks taps, so
+  screens never draw their own loading state (a next page's spinner is part of its list). A failed screen load shows `.headerMessage(...)` with "Try again"; other
   errors show `.toast(model:)`. Toasts never have buttons.
 - Network images use `RemoteImage` (our `ImageLoader`), never `AsyncImage`.
 - Previews only for CoreUI components, not for screens.
@@ -64,6 +69,14 @@ CoreBase            models, AppError, Log, Global… helpers (no dependencies)
 
 ## Conventions
 
+- Every screen is a TCA `@Reducer` named `<Name>Core` with a `<Name>View`. State: view state (`viewMode`, errors)
+  first, then information state. Actions are named `on<Event>`; effects live in a `private extension` under
+  `// MARK: Api calls`. Push navigation uses `StackState` with a `@Reducer enum Path`.
+- A feature module declares what it needs in `<Module>+Interface.swift` (`exploreBaseImports`), which the app sets
+  in `AppInterface+<Module>.swift`; reducers read it through `@DependencyClient`s in `<Module>+Dependencies.swift`.
+- Reducer tests use Swift Testing with `TestStore` (exhaustive), built by a `makeTestStore` helper; every action has
+  a test. Time-based effects use a `TestClock`.
+- No complex UI in screens: cards, grids and messages are CoreUI components.
 - The app uses the SwiftUI `App` lifecycle with `WindowGroup`. Do not add a `UIWindow` or `SceneDelegate`.
 - Async APIs and services return `Result<T, AppError>`. Error text is produced only in CoreUI `AppError+Strings`.
 - Keep comments short.
