@@ -5,7 +5,7 @@
 //  Created by Yasin Nazlican on 17.11.2021.
 //
 
-import Core
+import CoreAPI
 import CoreUI
 import UIKit
 
@@ -13,20 +13,20 @@ public final class AppCoordinator: Coordinator {
 
     // MARK: Public Properties
 
-    public let service: NASAServices
+    public let imageSearchApi: any ImageSearchApi
     public private(set) lazy var rootViewController = UINavigationController()
 
     // MARK: Life-Cycle
 
-    public init(service: NASAServices) {
-        self.service = service
+    public init(imageSearchApi: any ImageSearchApi) {
+        self.imageSearchApi = imageSearchApi
     }
 
     public override func start() {
         UINavigationBar.applyDefaultStyling()
         let homeCoordinator = HomeCoordinator(
             rootViewController: rootViewController,
-            service: service
+            imageSearchApi: imageSearchApi
         )
         addChildCoordinator(homeCoordinator)
         homeCoordinator.start()

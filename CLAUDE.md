@@ -36,9 +36,21 @@ warnings stay allowed until the UIKit code is replaced, then CI moves to `--stri
 
 Every module is a local Swift package, and packages reference each other with `../` paths.
 
-- `Core`: networking, NASA service and models
-- `CoreUI`: reusable UIKit components
-- `Home`: image list and details screens
+```
+TheMilkyWay (app)   only target importing *Impl (as `private import`), wires it in AppInterface
+  ↑
+Home                image list and details screens
+  ↑
+CoreUI              reusable UIKit components, error text
+CoreAPI | Impl | Stubs   API protocols / NASA over URLSession / offline stubs
+CoreBase            models, AppError, Log, Global… helpers (no dependencies)
+```
+
+- Response models end in `DTO`, request models in `Request`. NASA's raw response shape stays inside `CoreAPIImpl`.
+- The API is chosen once at launch in `AppInterface.apiEnvironment(for:)`: every build uses NASA's live API.
+  Stubs serve tests and previews.
+- Dates and other shown values are formatted once in CoreBase `Global…` helpers, never inline.
+- Log with `Log` from CoreBase, never `print`. Never log personal data.
 
 ## Conventions
 

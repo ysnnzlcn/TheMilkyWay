@@ -5,7 +5,8 @@
 //  Created by Yasin Nazlican on 20.11.2021.
 //
 
-import Core
+import CoreAPI
+import CoreBase
 import CoreUI
 import Home
 import XCTest
@@ -13,22 +14,28 @@ import XCTest
 @MainActor
 final class HomeViewModelTests: XCTestCase {
 
-    func test_getImages_shouldCallService() async {
-        let service = MockNASAServices()
-        let sut = HomeViewModel(service: service)
+    private let images = (1...3).map { NASAImageDTO(id: "ID-\($0)", title: "Image \($0)") }
+
+    private var page: ImageSearchPageDTO {
+        ImageSearchPageDTO(images: images, totalHits: images.count, hasNextPage: false)
+    }
+
+    func test_getImages_shouldRequestFirstPageOfEveryImage() async {
+        let api = ImageSearchApiMock(result: .success(page))
+        let sut = HomeViewModel(imageSearchApi: api)
 
         await sut.getImages()
 
-        let callsCount = await service.searchImagesCallsCount
-        XCTAssertEqual(callsCount, 1)
+        let requests = await api.requests
+        XCTAssertEqual(requests, [SearchImagesRequest(query: "", page: 1)])
     }
 
     func test_givenServiceCallSucceeds_shouldUpdateItemsAndStopLoading() async {
-        let sut = HomeViewModel(service: MockNASAServices())
+        let sut = HomeViewModel(imageSearchApi: ImageSearchApiMock(result: .success(page)))
 
         await sut.getImages()
 
-        XCTAssertEqual(sut.items, NASAImageResponse.mock.collection.items)
+        XCTAssertEqual(sut.items, images)
         guard case .toggleLoading(false) = sut.state else {
             return XCTFail("Expected loading to stop")
         }
@@ -36,7 +43,7 @@ final class HomeViewModelTests: XCTestCase {
 
     func test_givenServiceCallFails_shouldUpdateStateWithError() async {
         let error = AppError.api(.server)
-        let sut = HomeViewModel(service: MockNASAServices(searchImagesResult: .failure(error)))
+        let sut = HomeViewModel(imageSearchApi: ImageSearchApiMock(result: .failure(error)))
 
         await sut.getImages()
 
@@ -48,7 +55,7 @@ final class HomeViewModelTests: XCTestCase {
     }
 
     func test_itemSelected_shouldUpdateStateWithNavigation() async {
-        let sut = HomeViewModel(service: MockNASAServices())
+        let sut = HomeViewModel(imageSearchApi: ImageSearchApiMock(result: .success(page)))
         await sut.getImages()
 
         sut.itemSelected(at: 0)
@@ -56,6 +63,6 @@ final class HomeViewModelTests: XCTestCase {
         guard case .itemSelected(let item) = sut.state else {
             return XCTFail("Expected a selected item")
         }
-        XCTAssertEqual(item, NASAImageResponse.mock.collection.items[0])
+        XCTAssertEqual(item, images[0])
     }
 }

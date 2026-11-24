@@ -1,0 +1,82 @@
+{
+  "collection": {
+    "items": [
+      {
+        "data": [
+          {
+            "center": "JPL",
+            "date_created": "2009-09-24T18:00:22Z",
+            "description": "Nearside of the Moon",
+            "keywords": ["Moon", "Chandrayaan-1"],
+            "media_type": "image",
+            "nasa_id": "PIA12235",
+            "secondary_creator": "ISRO/NASA/JPL-Caltech/Brown Univ.",
+            "title": "Nearside of the Moon"
+          }
+        ],
+        "links": [
+          {
+            "href": "https://images-assets.nasa.gov/image/PIA12235/PIA12235~medium.jpg",
+            "rel": "alternate",
+            "render": "image",
+            "width": 1280
+          },
+          {
+            "href": "https://images-assets.nasa.gov/image/PIA12235/PIA12235~small.jpg",
+            "rel": "alternate",
+            "render": "image",
+            "width": 640
+          },
+          {
+            "href": "https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg",
+            "rel": "preview",
+            "render": "image",
+            "width": 640
+          },
+          {
+            "href": "https://images-assets.nasa.gov/image/PIA12235/PIA12235~orig.jpg",
+            "rel": "canonical",
+            "render": "image",
+            "width": 4000
+          },
+          {
+            "rel": "alternate",
+            "render": "image",
+            "width": 1600
+          }
+        ]
+      },
+      {
+        "href": "https://images-assets.nasa.gov/image/BROKEN-1/collection.json"
+      },
+      {
+        "data": [
+          {
+            "nasa_id": "SPARSE-1",
+            "title": "Sparse",
+            "description": " ",
+            "photographer": "A. Photographer",
+            "date_created": "not a date"
+          }
+        ],
+        "links": [
+          {
+            "href": "https://images-assets.nasa.gov/image/SPARSE-1/SPARSE-1~orig.jpg",
+            "rel": "canonical",
+            "width": 9000
+          }
+        ]
+      },
+      {
+        "data": [
+          {
+            "title": "No id"
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "total_hits": 3
+    }
+  }
+}

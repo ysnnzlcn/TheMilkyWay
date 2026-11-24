@@ -6,7 +6,7 @@
 //
 
 import Combine
-import Core
+import CoreBase
 import CoreUI
 import Foundation
 import UIKit
@@ -16,18 +16,16 @@ public final class ImageDetailsViewModel {
 
     // MARK: Private Variables
 
-    private let service: NASAServices
-    private let imageModel: NASAImage
+    private let imageModel: NASAImageDTO
 
     // MARK: Public Variables
 
     @Published public private(set) var items = [ImageDetailsTableDataSource.Item]()
-    public var imageTitle: String { imageModel.info.first?.title ?? "" }
+    public var imageTitle: String { imageModel.title }
 
     // MARK: Life-Cycle
 
-    public init(service: NASAServices, imageModel: NASAImage) {
-        self.service = service
+    public init(imageModel: NASAImageDTO) {
         self.imageModel = imageModel
     }
 
@@ -35,7 +33,7 @@ public final class ImageDetailsViewModel {
 
     public func didLoad() {
         items = [
-            .init(cell: .imageHeaderCell(imageModel.links.first?.percentageEncodedHref)),
+            .init(cell: .imageHeaderCell(imageModel.imageURL?.absoluteString)),
             .init(cell: .plainTextCell(headerText)),
             .init(cell: .plainTextCell(descriptionText))
         ]
@@ -54,7 +52,7 @@ extension ImageDetailsViewModel {
         paragraphStyle.lineHeightMultiple = 1.57
 
         return .init(
-            string: imageModel.info.first?.imageDescription ?? "No description provided.",
+            string: imageModel.description ?? "No description provided.",
             attributes: [
                 .foregroundColor: UIColor.primaryTextColor,
                 .font: UIFont.appFontRegular(16),

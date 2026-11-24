@@ -6,7 +6,7 @@
 //
 
 import Combine
-import Core
+import CoreBase
 import CoreUI
 import UIKit
 
@@ -15,7 +15,7 @@ public protocol HomeViewControllerCoordinatorDelegate: AnyObject {
 
     func homeViewControllerDidSelect(
         _ sender: HomeViewController,
-        image: NASAImage
+        image: NASAImageDTO
     )
 }
 
