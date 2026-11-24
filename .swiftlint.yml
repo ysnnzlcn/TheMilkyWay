@@ -42,8 +42,10 @@ opt_in_rules:
   - trailing_closure
 
 included:
-  - Core/Sources
-  - Core/Tests
+  - CoreAPI/Sources
+  - CoreAPI/Tests
+  - CoreBase/Sources
+  - CoreBase/Tests
   - CoreUI/Sources
   - CoreUI/Tests
   - Home/Sources

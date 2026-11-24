@@ -3,7 +3,7 @@
 //  CoreUI
 //
 
-import Core
+import CoreBase
 
 public extension AppError {
 

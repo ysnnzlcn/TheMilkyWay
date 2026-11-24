@@ -9,17 +9,27 @@ let package = Package(
         .library(name: "Home", targets: ["Home"]),
     ],
     dependencies: [
-        .package(path: "../Core"),
+        .package(path: "../CoreAPI"),
+        .package(path: "../CoreBase"),
         .package(path: "../CoreUI"),
     ],
     targets: [
         .target(
             name: "Home",
             dependencies: [
-                .product(name: "Core", package: "Core"),
+                .product(name: "CoreAPI", package: "CoreAPI"),
+                .product(name: "CoreBase", package: "CoreBase"),
                 .product(name: "CoreUI", package: "CoreUI"),
             ]
         ),
-        .testTarget(name: "HomeTests", dependencies: ["Home"]),
+        .testTarget(
+            name: "HomeTests",
+            dependencies: [
+                "Home",
+                .product(name: "CoreAPI", package: "CoreAPI"),
+                .product(name: "CoreBase", package: "CoreBase"),
+                .product(name: "CoreUI", package: "CoreUI"),
+            ]
+        ),
     ]
 )

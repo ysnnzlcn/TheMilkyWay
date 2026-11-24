@@ -3,14 +3,13 @@
 //  TheMilkyWay
 //
 
-import Core
 import SwiftUI
 
 /// Hosts the UIKit screens until they move to SwiftUI + TCA.
 struct LegacyRootView: UIViewControllerRepresentable {
 
     func makeCoordinator() -> AppCoordinator {
-        AppCoordinator(service: RestNASAServices())
+        AppCoordinator(imageSearchApi: mainTargetImports.apiManager.imageSearch)
     }
 
     func makeUIViewController(context: Context) -> UINavigationController {

@@ -5,14 +5,15 @@
 //  Created by Yasin Nazlican on 18.11.2021.
 //
 
-import Core
+import CoreAPI
+import CoreBase
 import Home
 import UIKit
 
 fileprivate enum HomeControllers {
 
     case home
-    case imageDetail(_ image: NASAImage)
+    case imageDetail(_ image: NASAImageDTO)
 }
 
 public final class HomeCoordinator: Coordinator {
@@ -20,13 +21,13 @@ public final class HomeCoordinator: Coordinator {
     // MARK: Public Variables
 
     public let rootViewController: UINavigationController
-    public let service: NASAServices
+    public let imageSearchApi: any ImageSearchApi
 
     // MARK: Life-Cycle
 
-    public init(rootViewController: UINavigationController, service: NASAServices) {
+    public init(rootViewController: UINavigationController, imageSearchApi: any ImageSearchApi) {
         self.rootViewController = rootViewController
-        self.service = service
+        self.imageSearchApi = imageSearchApi
     }
 
     public override func start() {
@@ -37,13 +38,13 @@ public final class HomeCoordinator: Coordinator {
     private func makeController(type: HomeControllers) -> UIViewController {
         switch type {
         case .home:
-            let viewModel = HomeViewModel(service: service)
+            let viewModel = HomeViewModel(imageSearchApi: imageSearchApi)
             let controller = HomeViewController(viewModel: viewModel)
             controller.delegate = self
             return controller
 
         case .imageDetail(let image):
-            let viewModel = ImageDetailsViewModel(service: service, imageModel: image)
+            let viewModel = ImageDetailsViewModel(imageModel: image)
             let controller = ImageDetailsViewController(viewModel: viewModel)
             return controller
         }
@@ -57,7 +58,7 @@ public final class HomeCoordinator: Coordinator {
 
 extension HomeCoordinator: HomeViewControllerCoordinatorDelegate {
 
-    public func homeViewControllerDidSelect(_ sender: HomeViewController, image: NASAImage) {
+    public func homeViewControllerDidSelect(_ sender: HomeViewController, image: NASAImageDTO) {
         navigateTo(type: .imageDetail(image))
     }
 }

@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		84877BF1274684DA000311FC /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 84877BF0274684DA000311FC /* Home */; };
 		84877BF427468B86000311FC /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 84877BF327468B86000311FC /* CoreUI */; };
-		84F4583027455D1300A8A7C2 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 84F4582F27455D1300A8A7C2 /* Core */; };
+		84C0DE000000000000000002 /* CoreAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000001 /* CoreAPI */; };
+		84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000003 /* CoreAPIImpl */; };
+		84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000005 /* CoreAPIStubs */; };
+		84F4583027455D1300A8A7C2 /* CoreBase in Frameworks */ = {isa = PBXBuildFile; productRef = 84F4582F27455D1300A8A7C2 /* CoreBase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +76,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84F4583027455D1300A8A7C2 /* Core in Frameworks */,
+				84F4583027455D1300A8A7C2 /* CoreBase in Frameworks */,
+				84C0DE000000000000000002 /* CoreAPI in Frameworks */,
+				84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */,
+				84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */,
 				84877BF1274684DA000311FC /* Home in Frameworks */,
 				84877BF427468B86000311FC /* CoreUI in Frameworks */,
 			);
@@ -146,7 +152,10 @@
 			);
 			name = TheMilkyWay;
 			packageProductDependencies = (
-				84F4582F27455D1300A8A7C2 /* Core */,
+				84F4582F27455D1300A8A7C2 /* CoreBase */,
+				84C0DE000000000000000001 /* CoreAPI */,
+				84C0DE000000000000000003 /* CoreAPIImpl */,
+				84C0DE000000000000000005 /* CoreAPIStubs */,
 				84877BF0274684DA000311FC /* Home */,
 				84877BF327468B86000311FC /* CoreUI */,
 			);
@@ -611,9 +620,21 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreUI;
 		};
-		84F4582F27455D1300A8A7C2 /* Core */ = {
+		84C0DE000000000000000001 /* CoreAPI */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Core;
+			productName = CoreAPI;
+		};
+		84C0DE000000000000000003 /* CoreAPIImpl */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreAPIImpl;
+		};
+		84C0DE000000000000000005 /* CoreAPIStubs */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreAPIStubs;
+		};
+		84F4582F27455D1300A8A7C2 /* CoreBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreBase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

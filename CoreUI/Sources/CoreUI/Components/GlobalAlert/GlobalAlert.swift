@@ -5,7 +5,6 @@
 //  Created by Yasin Nazlican on 18.11.2021.
 //
 
-import Core
 import UIKit
 
 public typealias AlertAction = (title: String, action: (@MainActor () -> Void)?)

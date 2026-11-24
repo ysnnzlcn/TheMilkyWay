@@ -5,17 +5,17 @@
 //  Created by Yasin Nazlican on 19.11.2021.
 //
 
-import Core
+import CoreBase
 import UIKit
 
 public final class ImageTableCellViewModel: Sendable {
 
     // MARK: Public Variables
 
-    public let imageModel: NASAImage
+    public let imageModel: NASAImageDTO
 
     var imageURL: URL? {
-        URL(string: imageModel.links.first?.percentageEncodedHref ?? "")
+        imageModel.thumbnailURL
     }
 
     public var text: NSAttributedString {
@@ -30,7 +30,7 @@ public final class ImageTableCellViewModel: Sendable {
 
     // MARK: Life-Cycle
 
-    public init(imageModel: NASAImage) {
+    public init(imageModel: NASAImageDTO) {
         self.imageModel = imageModel
     }
 
@@ -45,7 +45,7 @@ public final class ImageTableCellViewModel: Sendable {
 
     private var titleText: NSAttributedString {
         .init(
-            string: imageModel.info.first?.title ?? "-",
+            string: imageModel.title,
             attributes: [
                 .foregroundColor: UIColor.primaryTextColor,
                 .font: UIFont.appFontBold(16)
@@ -55,16 +55,14 @@ public final class ImageTableCellViewModel: Sendable {
 
     private var photographerText: NSAttributedString {
         .init(
-            string: imageModel.info.first?.photographer ?? "-",
+            string: imageModel.credit ?? "-",
             attributes: subtitleAttributes
         )
     }
 
     private var dateText: NSAttributedString {
-        let asDate = imageModel.info.first?.dateCreated.toDate()
-        let beautifiedDate = asDate?.toString(format: "dd MMM, yyyy")
-        return .init(
-            string: beautifiedDate ?? "-",
+        .init(
+            string: imageModel.dateCreated.map { GlobalDateFormatter.date($0) } ?? "-",
             attributes: subtitleAttributes
         )
     }
