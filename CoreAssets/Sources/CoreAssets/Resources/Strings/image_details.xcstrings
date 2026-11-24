@@ -1,0 +1,30 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "favoriteAdded" : {
+      "comment" : "Image details: confirmation toast after saving the image.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added to Favorites"
+          }
+        }
+      }
+    },
+    "favoriteRemoved" : {
+      "comment" : "Image details: confirmation toast after removing the image from Favorites.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removed from Favorites"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

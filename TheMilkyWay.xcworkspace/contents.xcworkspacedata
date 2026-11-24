@@ -11,10 +11,16 @@
       location = "group:CoreBase">
    </FileRef>
    <FileRef
+      location = "group:CoreLogic">
+   </FileRef>
+   <FileRef
       location = "group:CoreUI">
    </FileRef>
    <FileRef
       location = "group:ExploreBase">
+   </FileRef>
+   <FileRef
+      location = "group:FavoritesBase">
    </FileRef>
    <FileRef
       location = "group:ImageDetails">

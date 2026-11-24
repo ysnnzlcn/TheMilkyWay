@@ -28,11 +28,11 @@ public struct RemoteImage: View {
     }
 
     public var body: some View {
+        // Read once per draw: it looks up the memory cache.
+        let shown = shownPhase
         Color.clear
-            .background(shownPhase.url == nil ? DS.Colors.placeholder : .clear)
-            .overlay { content }
-            // Its frame takes taps (e.g. inside a card's button); `Color.clear` alone takes none once loaded.
-            .contentShape(.rect)
+            .background(shown.url == nil ? DS.Colors.placeholder : .clear)
+            .overlay { content(shown) }
             .onGeometryChange(for: CGSize.self) { $0.size } action: { size = $0 }
             .task(id: request) { await load(request) }
             .animation(.easeInOut(duration: DS.Motion.base), value: phase)
@@ -51,8 +51,8 @@ public struct RemoteImage: View {
     }
 
     @ViewBuilder
-    private var content: some View {
-        switch shownPhase {
+    private func content(_ shown: Phase) -> some View {
+        switch shown {
         case .loading:
             EmptyView()
         case .loaded(let image, _):
@@ -113,7 +113,7 @@ private extension RemoteImage {
 
 #Preview {
     HStack(spacing: DS.Spacing.lg) {
-        RemoteImage(url: URL(string: "https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg"))
+        RemoteImage(url: .previewImage)
             .frame(width: 120, height: 120)
             .clipShape(.rect(cornerRadius: DS.Radius.md))
         RemoteImage(url: nil)

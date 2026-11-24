@@ -37,6 +37,7 @@ let package = Package(
             dependencies: [
                 "ExploreBase",
                 .product(name: "CoreAPI", package: "CoreAPI"),
+                .product(name: "CoreAPIMocks", package: "CoreAPI"),
                 .product(name: "CoreBase", package: "CoreBase"),
                 .product(name: "ImageDetails", package: "ImageDetails"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

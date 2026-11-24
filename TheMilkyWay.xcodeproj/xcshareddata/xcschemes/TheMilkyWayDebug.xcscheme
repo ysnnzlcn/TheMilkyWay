@@ -73,6 +73,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CoreLogicTests"
+               BuildableName = "CoreLogicTests"
+               BlueprintName = "CoreLogicTests"
+               ReferencedContainer = "container:CoreLogic">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "CoreUITests"
                BuildableName = "CoreUITests"
                BlueprintName = "CoreUITests"
@@ -87,6 +97,26 @@
                BuildableName = "ExploreBaseTests"
                BlueprintName = "ExploreBaseTests"
                ReferencedContainer = "container:ExploreBase">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FavoritesBaseTests"
+               BuildableName = "FavoritesBaseTests"
+               BlueprintName = "FavoritesBaseTests"
+               ReferencedContainer = "container:FavoritesBase">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ImageDetailsTests"
+               BuildableName = "ImageDetailsTests"
+               BlueprintName = "ImageDetailsTests"
+               ReferencedContainer = "container:ImageDetails">
             </BuildableReference>
          </TestableReference>
       </Testables>

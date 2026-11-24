@@ -46,10 +46,10 @@ public struct ExploreCore: Sendable {
         var images: [NASAImageDTO] = []
         /// `nil` before the first page and after the last.
         var nextPage: Int?
-        /// The search the latest first page was asked for; answers to an older search are ignored.
+        /// The search the latest first page was asked for; next pages ask for the same one.
         var requestedQuery: String?
-        /// The search `images` answer; `nil` before any answer or after a failure.
-        var shownQuery: String?
+        /// A first page arrived and nothing failed since.
+        var hasLoaded = false
         var path = StackState<Path.State>()
 
         /// What is searched: the field's text, or the featured topic when it's empty.
@@ -60,7 +60,7 @@ public struct ExploreCore: Sendable {
 
         /// The search was answered with nothing.
         var showsNoResults: Bool {
-            viewMode == .content && loadError == nil && images.isEmpty && shownQuery != nil
+            viewMode == .content && loadError == nil && images.isEmpty && hasLoaded
         }
 
         public init() { }
@@ -78,6 +78,8 @@ public struct ExploreCore: Sendable {
         case onListEnd
         case onImageTap(id: String)
         case onToastDismiss
+        /// The tab was tapped again: back to the grid.
+        case popToRoot
         case onGetImages(Result<ImageSearchPageDTO, AppError>, request: SearchImagesRequest)
         case path(StackActionOf<Path>)
     }
@@ -94,20 +96,10 @@ public struct ExploreCore: Sendable {
                 return startSearch(&state)
 
             case let .onQueryChange(query):
-                state.query = query
-                // Same search as the one shown or loading (e.g. a space typed): nothing to send.
-                guard state.searchQuery != state.requestedQuery else { return .cancel(id: CancelID.typing) }
-                return .run { send in
-                    try await clock.sleep(for: Self.typingPause)
-                    await send(.onTypingPause)
-                }
-                .cancellable(id: CancelID.typing, cancelInFlight: true)
+                return onQueryChange(query, state: &state)
 
             case .onListEnd:
-                let canLoadMore = !state.isLoadingMore && state.viewMode == .content
-                guard canLoadMore, let page = state.nextPage, let query = state.requestedQuery else { return .none }
-                state.isLoadingMore = true
-                return getImages(SearchImagesRequest(query: query, page: page))
+                return loadNextPage(&state)
 
             case let .onImageTap(id):
                 guard let image = state.images.first(where: { $0.id == id }) else { return .none }
@@ -118,8 +110,13 @@ public struct ExploreCore: Sendable {
                 state.error = nil
                 return .none
 
+            case .popToRoot:
+                state.path.removeAll()
+                return .none
+
             case let .onGetImages(result, request):
-                guard request.query == state.requestedQuery else { return .none }
+                // No check for an older search's answer: starting a search cancels the running request, and a
+                // cancelled effect never sends.
                 onGetImages(result, request: request, state: &state)
                 return .none
 
@@ -138,6 +135,26 @@ extension ExploreCore.Path.Action: Equatable, Sendable {}
 
 private extension ExploreCore {
 
+    /// Waits for typing to pause before searching; each new letter restarts the wait.
+    func onQueryChange(_ query: String, state: inout State) -> Effect<Action> {
+        state.query = query
+        // Same search as the one shown or loading (e.g. a space typed): nothing to send.
+        guard state.searchQuery != state.requestedQuery else { return .cancel(id: CancelID.typing) }
+        return .run { send in
+            try await clock.sleep(for: Self.typingPause)
+            await send(.onTypingPause)
+        }
+        .cancellable(id: CancelID.typing, cancelInFlight: true)
+    }
+
+    /// Asks for the next page, unless there is none or a load is already running.
+    func loadNextPage(_ state: inout State) -> Effect<Action> {
+        let canLoadMore = !state.isLoadingMore && state.viewMode == .content
+        guard canLoadMore, let page = state.nextPage, let query = state.requestedQuery else { return .none }
+        state.isLoadingMore = true
+        return getImages(SearchImagesRequest(query: query, page: page))
+    }
+
     /// Asks for the first page of the current search; a search still running is cancelled.
     func startSearch(_ state: inout State) -> Effect<Action> {
         state.requestedQuery = state.searchQuery
@@ -152,8 +169,6 @@ private extension ExploreCore {
     }
 
     func onGetImages(_ result: Result<ImageSearchPageDTO, AppError>, request: SearchImagesRequest, state: inout State) {
-        // A cancelled request was replaced by a newer one, which owns the state now.
-        if case .failure(.api(.cancelled)) = result { return }
         let isFirstPage = request.page == 1
         state.viewMode = .content
         state.isLoadingMore = false
@@ -167,11 +182,11 @@ private extension ExploreCore {
             let new = page.images.filter { !known.contains($0.id) && seen.insert($0.id).inserted }
             state.images = earlier + new
             state.nextPage = page.hasNextPage ? request.page + 1 : nil
-            state.shownQuery = request.query
+            state.hasLoaded = true
 
         case let .failure(error) where isFirstPage:
             state.images = []
-            state.shownQuery = nil
+            state.hasLoaded = false
             state.loadError = error
 
         case let .failure(error):

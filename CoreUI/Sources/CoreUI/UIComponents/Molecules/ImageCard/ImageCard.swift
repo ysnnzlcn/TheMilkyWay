@@ -3,9 +3,11 @@
 //  CoreUI
 //
 
+import CoreBase
 import SwiftUI
 
-/// A square image with its title under it, on two lines (space kept, so cards in a row line up).
+/// A square image with its title under it, on two lines (space kept, so cards in a row line up). The whole card is
+/// its tap area, picture included.
 public struct ImageCard: View {
 
     public struct UIModel: Identifiable, Equatable, Sendable {
@@ -17,6 +19,11 @@ public struct ImageCard: View {
             self.id = id
             self.title = title
             self.imageURL = imageURL
+        }
+
+        /// The card for an image: its title and small preview. Every grid of images uses this.
+        public init(image: NASAImageDTO) {
+            self.init(id: image.id, title: image.title, imageURL: image.thumbnailURL)
         }
     }
 
@@ -37,6 +44,8 @@ public struct ImageCard: View {
                 .lineLimit(2, reservesSpace: true)
                 .multilineTextAlignment(.leading)
         }
+        // A loaded image has no tappable background of its own; the card's whole frame takes taps.
+        .contentShape(.rect)
         // VoiceOver reads the title once; the image is decorative here.
         .accessibilityElement(children: .combine)
     }
@@ -44,11 +53,7 @@ public struct ImageCard: View {
 
 #Preview {
     HStack(alignment: .top, spacing: DS.Spacing.lg) {
-        ImageCard(model: .init(
-            id: "1",
-            title: "Nearside of the Moon",
-            imageURL: URL(string: "https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg")
-        ))
+        ImageCard(model: .init(id: "1", title: "Nearside of the Moon", imageURL: .previewImage))
         ImageCard(model: .init(id: "2", title: "A very long title that needs more than two lines", imageURL: nil))
     }
     .padding()

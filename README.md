@@ -12,7 +12,9 @@
 
 This is a sample iOS project created using NASA search image API.
 
-> **Work in progress:** Favorites and more are coming. Open `TheMilkyWay.xcworkspace` with Xcode 27.
+Browse and search NASA's images, and keep favorites on your phone.
+
+> **Work in progress:** more is coming. Open `TheMilkyWay.xcworkspace` with Xcode 27.
 
 
 ## Technologies
@@ -22,6 +24,7 @@ This is a sample iOS project created using NASA search image API.
 * SwiftUI
 * The Composable Architecture (TCA)
 * async/await
+* SwiftData
 * Swift Testing
 
 

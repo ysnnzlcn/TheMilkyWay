@@ -99,11 +99,7 @@ extension NASASearchResponseDTO {
         let images = collection.items.compactMap(\.image)
         let totalHits = collection.metadata?.totalHits ?? images.count
         let loaded = request.page * pageSize
-        return ImageSearchPageDTO(
-            images: images,
-            totalHits: totalHits,
-            hasNextPage: loaded < min(totalHits, Self.maxResults)
-        )
+        return ImageSearchPageDTO(images: images, hasNextPage: loaded < min(totalHits, Self.maxResults))
     }
 }
 

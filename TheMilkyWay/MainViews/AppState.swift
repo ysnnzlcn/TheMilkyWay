@@ -4,24 +4,23 @@
 //
 
 import ComposableArchitecture
-import ExploreBase
 
-/// The root reducer. Explore only for now; the tab bar with Favorites comes with Favorites.
+/// The root reducer: the tab bar.
 @Reducer
 struct AppState {
 
     @ObservableState
     struct State: Equatable {
-        var explore = ExploreCore.State()
+        var mainTabBar = MainTabBarCore.State()
     }
 
     enum Action: Equatable {
-        case explore(ExploreCore.Action)
+        case mainTabBar(MainTabBarCore.Action)
     }
 
     var body: some ReducerOf<Self> {
-        Scope(state: \.explore, action: \.explore) {
-            ExploreCore()
+        Scope(state: \.mainTabBar, action: \.mainTabBar) {
+            MainTabBarCore()
         }
     }
 }

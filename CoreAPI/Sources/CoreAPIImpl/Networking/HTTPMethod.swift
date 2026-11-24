@@ -7,11 +7,8 @@
 
 import Foundation
 
+/// Only what the API uses; add a method together with the first request that needs it.
 enum HTTPMethod: String, Sendable {
 
-    case delete = "DELETE"
     case get = "GET"
-    case patch = "PATCH"
-    case post = "POST"
-    case put = "PUT"
 }

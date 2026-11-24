@@ -15,7 +15,10 @@ public enum SystemImage: String, Sendable {
     case checkmarkCircleFill = "checkmark.circle.fill"
     case exclamationmarkCircleFill = "exclamationmark.circle.fill"
     case exclamationmarkTriangle = "exclamationmark.triangle"
+    case heart
+    case heartFill = "heart.fill"
     case magnifyingglass
     case photo
+    case sparkles
     case wifiSlash = "wifi.slash"
 }

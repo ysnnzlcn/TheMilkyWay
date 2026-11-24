@@ -5,6 +5,7 @@
 
 import ComposableArchitecture
 import CoreAPI
+import CoreAPIMocks
 import CoreBase
 import ImageDetails
 import Testing
@@ -31,7 +32,7 @@ struct ExploreCoreTests {
             $0.viewMode = .content
             $0.images = Self.images(["1", "2"])
             $0.nextPage = 2
-            $0.shownQuery = "galaxy"
+            $0.hasLoaded = true
         }
         #expect(await api.requests == [request])
     }
@@ -46,21 +47,21 @@ struct ExploreCoreTests {
         }
         await store.receive(.onGetImages(.success(page), request: .init(query: "galaxy"))) {
             $0.viewMode = .content
-            $0.shownQuery = "galaxy"
+            $0.hasLoaded = true
         }
         #expect(store.state.showsNoResults)
     }
 
     @Test func failedFirstPageShowsFullScreenError() async {
-        let store = makeTestStore(api: ImageSearchApiMock(result: .failure(.api(.offline))))
+        let store = makeTestStore(api: ImageSearchApiMock(result: .failure(.network(.offline))))
 
         await store.send(.onFirstAppear) {
             $0.requestedQuery = "galaxy"
             $0.viewMode = .loading
         }
-        await store.receive(.onGetImages(.failure(.api(.offline)), request: .init(query: "galaxy"))) {
+        await store.receive(.onGetImages(.failure(.network(.offline)), request: .init(query: "galaxy"))) {
             $0.viewMode = .content
-            $0.loadError = .api(.offline)
+            $0.loadError = .network(.offline)
         }
         #expect(!store.state.showsNoResults)
     }
@@ -69,7 +70,7 @@ struct ExploreCoreTests {
         let page = Self.page(["1"])
         var state = ExploreCore.State()
         state.requestedQuery = "galaxy"
-        state.loadError = .api(.offline)
+        state.loadError = .network(.offline)
         let store = makeTestStore(api: ImageSearchApiMock(result: .success(page)), state: state)
 
         await store.send(.onRetryTap) {
@@ -79,7 +80,7 @@ struct ExploreCoreTests {
         await store.receive(.onGetImages(.success(page), request: .init(query: "galaxy"))) {
             $0.viewMode = .content
             $0.images = Self.images(["1"])
-            $0.shownQuery = "galaxy"
+            $0.hasLoaded = true
         }
     }
 
@@ -103,7 +104,7 @@ struct ExploreCoreTests {
         await store.receive(.onGetImages(.success(page), request: .init(query: "moon"))) {
             $0.viewMode = .content
             $0.images = Self.images(["1"])
-            $0.shownQuery = "moon"
+            $0.hasLoaded = true
         }
         #expect(await api.requests == [SearchImagesRequest(query: "moon", page: 1)])
     }
@@ -124,7 +125,7 @@ struct ExploreCoreTests {
         await store.receive(.onGetImages(.success(page), request: .init(query: "galaxy"))) {
             $0.viewMode = .content
             $0.images = Self.images(["1"])
-            $0.shownQuery = "galaxy"
+            $0.hasLoaded = true
         }
     }
 
@@ -152,7 +153,7 @@ struct ExploreCoreTests {
         await store.receive(.onGetImages(.success(moon), request: .init(query: "moon"))) {
             $0.viewMode = .content
             $0.images = Self.images(["2"])
-            $0.shownQuery = "moon"
+            $0.hasLoaded = true
         }
     }
 
@@ -164,12 +165,6 @@ struct ExploreCoreTests {
         await clock.advance(by: ExploreCore.typingPause)
 
         #expect(await api.requests.isEmpty)
-    }
-
-    @Test func answerToOlderSearchIsIgnored() async {
-        let store = makeTestStore(state: Self.shownState(query: "moon"))
-
-        await store.send(.onGetImages(.success(Self.page(["9"])), request: .init(query: "galaxy")))
     }
 
     // MARK: Next pages
@@ -208,26 +203,27 @@ struct ExploreCoreTests {
 
     @Test func failedNextPageShowsToastUntilDismissed() async {
         let store = makeTestStore(
-            api: ImageSearchApiMock(result: .failure(.api(.server))),
+            api: ImageSearchApiMock(result: .failure(.network(.server))),
             state: Self.shownState(query: "galaxy")
         )
 
         await store.send(.onListEnd) { $0.isLoadingMore = true }
-        await store.receive(.onGetImages(.failure(.api(.server)), request: .init(query: "galaxy", page: 2))) {
+        await store.receive(.onGetImages(.failure(.network(.server)), request: .init(query: "galaxy", page: 2))) {
             $0.isLoadingMore = false
-            $0.error = .api(.server)
+            $0.error = .network(.server)
         }
         await store.send(.onToastDismiss) { $0.error = nil }
     }
 
     // MARK: Navigation
 
-    @Test func imageTapPushesDetails() async {
+    @Test func imageTapPushesDetailsAndPopToRootGoesBack() async {
         let store = makeTestStore(state: Self.shownState(query: "galaxy"))
 
         await store.send(.onImageTap(id: "1")) {
             $0.path[id: 0] = .imageDetails(ImageDetailsCore.State(image: Self.images(["1"])[0]))
         }
+        await store.send(.popToRoot) { $0.path = StackState() }
     }
 
     // MARK: Helpers
@@ -249,7 +245,7 @@ struct ExploreCoreTests {
         var state = ExploreCore.State()
         state.query = query == ExploreCore.featuredQuery ? "" : query
         state.requestedQuery = query
-        state.shownQuery = query
+        state.hasLoaded = true
         state.images = images(["1"])
         state.nextPage = 2
         return state
@@ -260,7 +256,7 @@ struct ExploreCoreTests {
     }
 
     private static func page(_ ids: [String], hasNextPage: Bool = false) -> ImageSearchPageDTO {
-        ImageSearchPageDTO(images: images(ids), totalHits: ids.count, hasNextPage: hasNextPage)
+        ImageSearchPageDTO(images: images(ids), hasNextPage: hasNextPage)
     }
 }
 
@@ -277,7 +273,7 @@ private struct SlowImageSearchApi: ImageSearchApi {
             try await clock.sleep(for: Self.delay)
             return .success(page(request))
         } catch {
-            return .failure(.api(.cancelled))
+            return .failure(.network(.cancelled))
         }
     }
 }

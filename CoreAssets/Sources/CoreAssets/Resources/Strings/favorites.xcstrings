@@ -1,0 +1,42 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "empty.description" : {
+      "comment" : "Favorites: hint when nothing is saved yet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap Add to Favorites on any image to keep it here."
+          }
+        }
+      }
+    },
+    "empty.title" : {
+      "comment" : "Favorites: title when nothing is saved yet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No favorites yet"
+          }
+        }
+      }
+    },
+    "title" : {
+      "comment" : "Favorites: the screen's navigation title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorites"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

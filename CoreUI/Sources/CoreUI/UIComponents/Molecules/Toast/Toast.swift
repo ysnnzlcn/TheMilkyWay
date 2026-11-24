@@ -56,7 +56,7 @@ public struct ToastUIModel: Equatable {
     /// The error toast with the error's copy (`AppError+Strings`). `nil` when there is no error.
     public init?(error: AppError?, onDismiss: @escaping () -> Void) {
         guard let error else { return nil }
-        self.init(text: error.copy.toastText, status: error.isOffline ? .noConnection : .error, onDismiss: onDismiss)
+        self.init(text: error.copy.toastText, status: error.copy.toastStatus, onDismiss: onDismiss)
     }
 
     public static func == (lhs: ToastUIModel, rhs: ToastUIModel) -> Bool {

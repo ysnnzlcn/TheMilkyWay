@@ -10,13 +10,13 @@ import os
 /// Messages are public: never log personal data.
 public enum Log {
 
-    public enum Category: String, Sendable {
+    public enum Category: String, CaseIterable, Sendable {
         case app
-        case home
         /// Toasts and full-screen messages shown, with their text.
         case messages
         case api
         case images
+        case favorites
     }
 
     public static func debug(_ message: String, _ category: Category, file: String = #fileID, line: Int = #line) {
@@ -35,10 +35,17 @@ public enum Log {
         log(.error, message, category, file: file, line: line)
     }
 
+    /// One logger per category, made once.
+    private static let loggers: [Category: Logger] = {
+        let subsystem = Bundle.main.bundleIdentifier ?? "TheMilkyWay"
+        return Dictionary(uniqueKeysWithValues: Category.allCases.map {
+            ($0, Logger(subsystem: subsystem, category: $0.rawValue))
+        })
+    }()
+
     /// One public string, so the file and line aren't hidden as `<private>` without a debugger attached.
     private static func log(_ level: OSLogType, _ message: String, _ category: Category, file: String, line: Int) {
-        let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "TheMilkyWay", category: category.rawValue)
         let text = "\(file):\(line) \(message)"
-        logger.log(level: level, "\(text, privacy: .public)")
+        loggers[category]?.log(level: level, "\(text, privacy: .public)")
     }
 }

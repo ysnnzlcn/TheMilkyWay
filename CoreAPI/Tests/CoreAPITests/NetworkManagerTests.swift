@@ -21,8 +21,6 @@ struct NetworkManagerTests {
         var path = "search"
         var requestTimeout: TimeInterval?
         var method: HTTPMethod = .get
-        var headers: [String: String]?
-        var body: Data?
         var queryItems: [URLQueryItem] = [.init(name: "q", value: "moon")]
     }
 
@@ -59,7 +57,6 @@ struct NetworkManagerTests {
         let page = try await api.searchImages(SearchImagesRequest(query: "moon", page: 2)).get()
 
         #expect(page.images.map(\.id) == ["PIA12235", "SPARSE-1"])
-        #expect(page.totalHits == 3)
         #expect(!page.hasNextPage)
         let query = StubURLProtocol.lastRequestURL?.query(percentEncoded: true)
         #expect(query == "q=moon&media_type=image&page=2&page_size=\(ImageSearchApiImpl.pageSize)")
@@ -70,7 +67,7 @@ struct NetworkManagerTests {
 
         let result = await makeManager().sendRequest(type: Payload.self, target: Target())
 
-        #expect(result == .failure(.api(.server)))
+        #expect(result == .failure(.network(.server)))
     }
 
     @Test func invalidBodyReturnsDecodingError() async {
@@ -78,21 +75,21 @@ struct NetworkManagerTests {
 
         let result = await makeManager().sendRequest(type: Payload.self, target: Target())
 
-        #expect(result == .failure(.api(.decoding)))
+        #expect(result == .failure(.network(.decoding)))
     }
 
     @Test(arguments: [
-        (URLError.Code.notConnectedToInternet, AppError.Kind.offline),
-        (URLError.Code.timedOut, AppError.Kind.timeout),
-        (URLError.Code.cancelled, AppError.Kind.cancelled),
-        (URLError.Code.badServerResponse, AppError.Kind.server),
+        (URLError.Code.notConnectedToInternet, AppError.NetworkKind.offline),
+        (URLError.Code.timedOut, AppError.NetworkKind.timeout),
+        (URLError.Code.cancelled, AppError.NetworkKind.cancelled),
+        (URLError.Code.badServerResponse, AppError.NetworkKind.server),
     ])
-    func urlErrorsMapToKinds(code: URLError.Code, kind: AppError.Kind) async {
+    func urlErrorsMapToKinds(code: URLError.Code, kind: AppError.NetworkKind) async {
         StubURLProtocol.stub(.failure(code))
 
         let result = await makeManager().sendRequest(type: Payload.self, target: Target())
 
-        #expect(result == .failure(.api(kind)))
+        #expect(result == .failure(.network(kind)))
     }
 
     @Test func invalidURLReturnsUnexpectedError() async {

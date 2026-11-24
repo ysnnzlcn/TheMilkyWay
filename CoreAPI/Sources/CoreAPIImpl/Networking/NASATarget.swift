@@ -21,14 +21,10 @@ enum NASATarget: NetworkTarget {
 
     var method: HTTPMethod { .get }
 
-    var headers: [String: String]? { nil }
-
-    var body: Data? { nil }
-
     var queryItems: [URLQueryItem] {
         switch self {
         case .search(let request, let pageSize):
-            let query = request.query.trimmingCharacters(in: .whitespacesAndNewlines)
+            let query = request.trimmedQuery
             // Without `q` NASA searches every image.
             let searchItems = query.isEmpty ? [] : [URLQueryItem(name: "q", value: query)]
             return searchItems + [

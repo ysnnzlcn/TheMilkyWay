@@ -1,8 +1,9 @@
 //
 //  ImageSearchApiMock.swift
-//  CoreAPI
+//  CoreAPIMocks
 //
 
+import CoreAPI
 import CoreBase
 
 /// For tests: answers every request with `handler` and records the requests.

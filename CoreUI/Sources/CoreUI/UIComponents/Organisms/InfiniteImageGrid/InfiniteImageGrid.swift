@@ -5,8 +5,8 @@
 
 import SwiftUI
 
-/// A scrolling two-column grid of `ImageCard`s that asks for more near its end, with a spinner under the last row
-/// while the next page loads.
+/// A scrolling two-column grid of `ImageCard`s. With `onListEnd` it pages: it asks for more near its end and shows
+/// a spinner under the last row while the next page loads. Without it, it shows every item it is given.
 public struct InfiniteImageGrid: View {
 
     /// How many cards before the end the next page is asked for, so it is usually ready before the end is reached.
@@ -16,7 +16,7 @@ public struct InfiniteImageGrid: View {
     private let isLoadingMore: Bool
     private let scrollResetID: AnyHashable?
     private let onTap: (String) -> Void
-    private let onListEnd: () -> Void
+    private let onListEnd: (() -> Void)?
 
     @State private var position = ScrollPosition(edge: .top)
 
@@ -29,12 +29,13 @@ public struct InfiniteImageGrid: View {
     ///   - scrollResetID: changing it scrolls back to the top, e.g. when a new search starts.
     ///   - onTap: the tapped card's `id`.
     ///   - onListEnd: one of the last cards appeared. Can be called several times; the caller ignores repeats.
+    ///     `nil` for a list that doesn't page.
     public init(
         items: [ImageCard.UIModel],
-        isLoadingMore: Bool,
+        isLoadingMore: Bool = false,
         scrollResetID: AnyHashable? = nil,
         onTap: @escaping (String) -> Void,
-        onListEnd: @escaping () -> Void
+        onListEnd: (() -> Void)? = nil
     ) {
         self.items = items
         self.isLoadingMore = isLoadingMore
@@ -69,7 +70,7 @@ public struct InfiniteImageGrid: View {
     }
 
     private func askForMoreIfNearEnd(_ item: ImageCard.UIModel) {
-        guard items.suffix(Self.prefetchDistance).contains(where: { $0.id == item.id }) else { return }
+        guard let onListEnd, items.suffix(Self.prefetchDistance).contains(where: { $0.id == item.id }) else { return }
         onListEnd()
     }
 }
@@ -77,11 +78,7 @@ public struct InfiniteImageGrid: View {
 #Preview {
     InfiniteImageGrid(
         items: (1...8).map { index in
-            ImageCard.UIModel(
-                id: "\(index)",
-                title: "Nearside of the Moon \(index)",
-                imageURL: URL(string: "https://images-assets.nasa.gov/image/PIA12235/PIA12235~thumb.jpg")
-            )
+            ImageCard.UIModel(id: "\(index)", title: "Nearside of the Moon \(index)", imageURL: .previewImage)
         },
         isLoadingMore: true,
         onTap: { _ in },
