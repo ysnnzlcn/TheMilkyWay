@@ -14,7 +14,10 @@
       location = "group:CoreUI">
    </FileRef>
    <FileRef
-      location = "group:Home">
+      location = "group:ExploreBase">
+   </FileRef>
+   <FileRef
+      location = "group:ImageDetails">
    </FileRef>
    <FileRef
       location = "container:TheMilkyWay.xcodeproj">

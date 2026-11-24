@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84877BF1274684DA000311FC /* Home in Frameworks */ = {isa = PBXBuildFile; productRef = 84877BF0274684DA000311FC /* Home */; };
-		84877BF427468B86000311FC /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 84877BF327468B86000311FC /* CoreUI */; };
+		84877BF1274684DA000311FC /* ExploreBase in Frameworks */ = {isa = PBXBuildFile; productRef = 84877BF0274684DA000311FC /* ExploreBase */; };
 		84C0DE000000000000000002 /* CoreAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000001 /* CoreAPI */; };
 		84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000003 /* CoreAPIImpl */; };
 		84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000005 /* CoreAPIStubs */; };
@@ -80,8 +79,7 @@
 				84C0DE000000000000000002 /* CoreAPI in Frameworks */,
 				84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */,
 				84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */,
-				84877BF1274684DA000311FC /* Home in Frameworks */,
-				84877BF427468B86000311FC /* CoreUI in Frameworks */,
+				84877BF1274684DA000311FC /* ExploreBase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,8 +154,7 @@
 				84C0DE000000000000000001 /* CoreAPI */,
 				84C0DE000000000000000003 /* CoreAPIImpl */,
 				84C0DE000000000000000005 /* CoreAPIStubs */,
-				84877BF0274684DA000311FC /* Home */,
-				84877BF327468B86000311FC /* CoreUI */,
+				84877BF0274684DA000311FC /* ExploreBase */,
 			);
 			productName = TheMilkyWay;
 			productReference = 848A45712745567200F3D2CE /* TheMilkyWay.app */;
@@ -368,6 +365,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
@@ -423,6 +422,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -612,13 +613,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		84877BF0274684DA000311FC /* Home */ = {
+		84877BF0274684DA000311FC /* ExploreBase */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Home;
-		};
-		84877BF327468B86000311FC /* CoreUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoreUI;
+			productName = ExploreBase;
 		};
 		84C0DE000000000000000001 /* CoreAPI */ = {
 			isa = XCSwiftPackageProductDependency;

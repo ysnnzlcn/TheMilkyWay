@@ -50,8 +50,9 @@ included:
   - CoreBase/Tests
   - CoreUI/Sources
   - CoreUI/Tests
-  - Home/Sources
-  - Home/Tests
+  - ExploreBase/Sources
+  - ExploreBase/Tests
+  - ImageDetails/Sources
   - TheMilkyWay
   - TheMilkyWayTests
 

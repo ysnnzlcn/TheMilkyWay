@@ -41,6 +41,17 @@ struct ImageLoaderTests {
         #expect(ImageStubURLProtocol.requestsCount == 1)
     }
 
+    @Test func cachedImageIsOnlyWhatWasLoadedAtThatSize() async {
+        ImageStubURLProtocol.stub(status: 200, data: Self.png(width: 40, height: 40))
+        let loader = makeLoader()
+
+        #expect(loader.cachedImage(for: url, maxPixelSize: 100) == nil)
+        _ = await loader.image(for: url, maxPixelSize: 100)
+
+        #expect(loader.cachedImage(for: url, maxPixelSize: 100) != nil)
+        #expect(loader.cachedImage(for: url, maxPixelSize: 200) == nil)
+    }
+
     @Test func serverErrorReturnsNil() async {
         ImageStubURLProtocol.stub(status: 404, data: Self.png(width: 40, height: 40))
 
@@ -86,9 +97,9 @@ private final class ImageStubURLProtocol: URLProtocol, @unchecked Sendable {
         state.withLock { $0 = State(status: status, data: data) }
     }
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
+    override static func canInit(with request: URLRequest) -> Bool { true }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
         let (status, data) = Self.state.withLock { state in

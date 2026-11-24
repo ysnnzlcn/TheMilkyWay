@@ -2,6 +2,9 @@
 
 import PackageDescription
 
+/// Our own code builds with warnings as errors (set per target: on the command line it would reach TCA too).
+let strict: [SwiftSetting] = [.treatAllWarnings(as: .error)]
+
 let package = Package(
     name: "CoreUI",
     platforms: [.iOS(.v27)],
@@ -18,7 +21,8 @@ let package = Package(
             dependencies: [
                 .product(name: "CoreAssets", package: "CoreAssets"),
                 .product(name: "CoreBase", package: "CoreBase"),
-            ]
+            ],
+            swiftSettings: strict
         ),
         .testTarget(
             name: "CoreUITests",
@@ -26,7 +30,8 @@ let package = Package(
                 "CoreUI",
                 .product(name: "CoreAssets", package: "CoreAssets"),
                 .product(name: "CoreBase", package: "CoreBase"),
-            ]
+            ],
+            swiftSettings: strict
         ),
     ]
 )

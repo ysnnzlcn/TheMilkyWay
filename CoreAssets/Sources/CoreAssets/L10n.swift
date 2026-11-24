@@ -18,6 +18,14 @@ public enum L10n {
         }
     }
 
+    public enum Explore {
+
+        public static var noResultsDescription: String { String(localized: .Explore.noResultsDescription) }
+        public static var noResultsTitle: String { String(localized: .Explore.noResultsTitle) }
+        public static var searchPrompt: String { String(localized: .Explore.searchPrompt) }
+        public static var title: String { String(localized: .Explore.title) }
+    }
+
     public enum Errors {
 
         public static var genericDescription: String { String(localized: .Errors.genericDescription) }

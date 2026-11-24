@@ -2,6 +2,9 @@
 
 import PackageDescription
 
+/// Our own code builds with warnings as errors (set per target: on the command line it would reach TCA too).
+let strict: [SwiftSetting] = [.treatAllWarnings(as: .error)]
+
 let package = Package(
     name: "CoreAssets",
     defaultLocalization: "en",
@@ -10,7 +13,7 @@ let package = Package(
         .library(name: "CoreAssets", targets: ["CoreAssets"]),
     ],
     targets: [
-        .target(name: "CoreAssets", resources: [.process("Resources")]),
-        .testTarget(name: "CoreAssetsTests", dependencies: ["CoreAssets"]),
+        .target(name: "CoreAssets", resources: [.process("Resources")], swiftSettings: strict),
+        .testTarget(name: "CoreAssetsTests", dependencies: ["CoreAssets"], swiftSettings: strict),
     ]
 )

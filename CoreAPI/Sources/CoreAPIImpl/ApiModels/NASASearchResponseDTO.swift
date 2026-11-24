@@ -115,7 +115,7 @@ private extension NASASearchResponseDTO.Item {
         return NASAImageDTO(
             id: id,
             title: title,
-            description: info.description.nonEmpty,
+            description: info.description.map(HTMLTextHelper.plainText).nonEmpty,
             center: info.center.nonEmpty,
             credit: info.photographer.nonEmpty ?? info.secondaryCreator.nonEmpty,
             dateCreated: info.dateCreated.flatMap { try? Date($0, strategy: .iso8601) },

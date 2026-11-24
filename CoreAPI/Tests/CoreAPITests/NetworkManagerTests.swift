@@ -52,7 +52,7 @@ struct NetworkManagerTests {
 
     /// Request, decoding and mapping together, as the app runs them.
     @Test func imageSearchLoadsPageFromResponse() async throws {
-        let body = String(decoding: try Fixture.searchResponse(), as: UTF8.self)
+        let body = try #require(String(bytes: try Fixture.searchResponse(), encoding: .utf8))
         StubURLProtocol.stub(.response(status: 200, body: body))
         let api = ImageSearchApiImpl(networkManager: makeManager())
 
@@ -129,9 +129,9 @@ private final class StubURLProtocol: URLProtocol, @unchecked Sendable {
         state.withLock { $0 = State(outcome: outcome) }
     }
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
+    override static func canInit(with request: URLRequest) -> Bool { true }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
         let outcome = Self.state.withLock { state in

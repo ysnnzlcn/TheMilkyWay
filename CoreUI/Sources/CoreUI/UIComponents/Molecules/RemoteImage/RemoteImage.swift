@@ -7,11 +7,13 @@ import CoreAssets
 import SwiftUI
 import UIKit
 
-/// Every image loaded from the network. It fills its frame; the caller sets the frame and clips it.
-/// Loading: placeholder color. Loaded: the image fades in. Failed: placeholder with a photo glyph.
+/// Every image loaded from the network, in the frame the caller sets. `.fill` crops to the frame (the caller clips);
+/// `.fit` shows the whole image. Loading: placeholder color. Loaded: the image fades in. Failed: placeholder with a
+/// photo glyph.
 public struct RemoteImage: View {
 
     private let url: URL?
+    private let contentMode: ContentMode
     private let accessibilityLabel: String?
 
     @Environment(\.displayScale) private var displayScale
@@ -19,14 +21,18 @@ public struct RemoteImage: View {
     @State private var phase: Phase = .loading
 
     /// - Parameter accessibilityLabel: `nil` for decorative images; set it when the image carries content.
-    public init(url: URL?, accessibilityLabel: String? = nil) {
+    public init(url: URL?, contentMode: ContentMode = .fill, accessibilityLabel: String? = nil) {
         self.url = url
+        self.contentMode = contentMode
         self.accessibilityLabel = accessibilityLabel
     }
 
     public var body: some View {
-        DS.Colors.placeholder
+        Color.clear
+            .background(shownPhase.url == nil ? DS.Colors.placeholder : .clear)
             .overlay { content }
+            // Its frame takes taps (e.g. inside a card's button); `Color.clear` alone takes none once loaded.
+            .contentShape(.rect)
             .onGeometryChange(for: CGSize.self) { $0.size } action: { size = $0 }
             .task(id: request) { await load(request) }
             .animation(.easeInOut(duration: DS.Motion.base), value: phase)
@@ -36,15 +42,23 @@ public struct RemoteImage: View {
             .accessibilityHidden(accessibilityLabel == nil)
     }
 
+    /// `phase`, or an image already in memory while it is still loading: a card scrolled back on screen shows its
+    /// image at once instead of fading in again (the fade follows `phase` only).
+    private var shownPhase: Phase {
+        guard case .loading = phase, let url = request.url, request.maxPixelSize > 0 else { return phase }
+        let cached = ImageLoader.shared.cachedImage(for: url, maxPixelSize: request.maxPixelSize)
+        return cached.map { .loaded($0, url: url) } ?? phase
+    }
+
     @ViewBuilder
     private var content: some View {
-        switch phase {
+        switch shownPhase {
         case .loading:
             EmptyView()
         case .loaded(let image, _):
             Image(uiImage: image)
                 .resizable()
-                .scaledToFill()
+                .aspectRatio(contentMode: contentMode)
                 // A filled image overflows its frame; it must not take taps outside it.
                 .allowsHitTesting(false)
         case .failed:
