@@ -10,7 +10,8 @@ extension AppInterface {
     @MainActor
     static func setupExploreBaseModule() {
         ExploreBase.exploreBaseImports = ExploreBaseImportsImpl(
-            imageSearchApi: mainTargetImports.apiManager.imageSearch
+            imageSearchApi: mainTargetImports.apiManager.imageSearch,
+            trackerService: mainTargetImports.trackerService
         )
     }
 }

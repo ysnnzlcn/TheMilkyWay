@@ -6,6 +6,7 @@
 import ComposableArchitecture
 import CoreAssets
 import CoreBase
+import CoreTracker
 import CoreUI
 import ImageDetails
 import SwiftUI
@@ -22,7 +23,7 @@ public struct FavoritesView: View {
 
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            BaseContentView(mode: store.viewMode) {
+            BaseContentView(screen: .favorites, mode: store.viewMode) {
                 // Every saved image is already loaded: no paging.
                 InfiniteImageGrid(items: cards, onTap: { store.send(.onImageTap(id: $0)) })
             }

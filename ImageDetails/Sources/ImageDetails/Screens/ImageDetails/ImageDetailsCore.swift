@@ -5,6 +5,7 @@
 
 import ComposableArchitecture
 import CoreBase
+import CoreTracker
 
 /// One image: large picture, title, the favorite button, details and description. Pushed from Explore and
 /// Favorites; it shows the image it was opened with (no request). The button follows the saved list while the
@@ -18,6 +19,7 @@ public struct ImageDetailsCore: Sendable {
     }
 
     @Dependency(\.favoritesClient) private var favoritesClient
+    @Dependency(\.trackerClient) private var trackerClient
 
     public init() { }
 
@@ -87,13 +89,28 @@ public struct ImageDetailsCore: Sendable {
                 state.isSaving = false
                 state.isFavorite = isFavorite
                 state.confirmation = isFavorite ? .added : .removed
-                return .none
+                return trackFavorite(isFavorite, imageID: state.image.id)
 
             case let .onFavoriteSaved(.failure(error)):
                 state.isSaving = false
                 state.error = error
                 return .none
             }
+        }
+    }
+}
+
+// MARK: Tracking
+
+private extension ImageDetailsCore {
+
+    /// Only a save that worked; a failed one changed nothing.
+    func trackFavorite(_ isFavorite: Bool, imageID: String) -> Effect<Action> {
+        .run { _ in
+            let event: ProductTrackerEvent = isFavorite
+                ? .favoriteAdded(imageID: imageID)
+                : .favoriteRemoved(imageID: imageID)
+            await trackerClient.service().track(.product(event))
         }
     }
 }

@@ -27,6 +27,7 @@ public struct ExploreCore: Sendable {
 
     @Dependency(\.continuousClock) private var clock
     @Dependency(\.imageSearchApiClient) private var imageSearchApiClient
+    @Dependency(\.trackerClient) private var trackerClient
 
     public init() { }
 
@@ -92,8 +93,11 @@ public struct ExploreCore: Sendable {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .onFirstAppear, .onRetryTap, .onTypingPause:
+            case .onFirstAppear, .onRetryTap:
                 return startSearch(&state)
+
+            case .onTypingPause:
+                return .merge(trackSearch(state), startSearch(&state))
 
             case let .onQueryChange(query):
                 return onQueryChange(query, state: &state)
@@ -191,6 +195,21 @@ private extension ExploreCore {
 
         case let .failure(error):
             state.error = error
+        }
+    }
+}
+
+// MARK: Tracking
+
+private extension ExploreCore {
+
+    /// A search the person typed: only its length, never the text. Clearing the field (back to the featured topic)
+    /// is not a search.
+    func trackSearch(_ state: State) -> Effect<Action> {
+        let typed = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !typed.isEmpty else { return .none }
+        return .run { _ in
+            await trackerClient.service().track(.product(.search(queryLength: typed.count)))
         }
     }
 }

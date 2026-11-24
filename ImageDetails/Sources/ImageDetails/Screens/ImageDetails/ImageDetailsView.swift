@@ -6,6 +6,7 @@
 import ComposableArchitecture
 import CoreAssets
 import CoreBase
+import CoreTracker
 import CoreUI
 import SwiftUI
 
@@ -20,7 +21,7 @@ public struct ImageDetailsView: View {
     }
 
     public var body: some View {
-        BaseContentView {
+        BaseContentView(screen: .imageDetails) {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                     RemoteImage(

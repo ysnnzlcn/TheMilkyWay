@@ -17,6 +17,8 @@
 		84C0DE00000000000000000E /* ImageDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE00000000000000000D /* ImageDetails */; };
 		84C0DE000000000000000010 /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE00000000000000000F /* CoreUI */; };
 		84C0DE000000000000000012 /* CoreAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000011 /* CoreAssets */; };
+		84C0DE000000000000000014 /* CoreTracker in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000013 /* CoreTracker */; };
+		84C0DE000000000000000016 /* CoreTrackerImpl in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000015 /* CoreTrackerImpl */; };
 		84F4583027455D1300A8A7C2 /* CoreBase in Frameworks */ = {isa = PBXBuildFile; productRef = 84F4582F27455D1300A8A7C2 /* CoreBase */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +81,8 @@
 				84C0DE00000000000000000E /* ImageDetails in Frameworks */,
 				84C0DE000000000000000010 /* CoreUI in Frameworks */,
 				84C0DE000000000000000012 /* CoreAssets in Frameworks */,
+				84C0DE000000000000000014 /* CoreTracker in Frameworks */,
+				84C0DE000000000000000016 /* CoreTrackerImpl in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +155,8 @@
 				84C0DE00000000000000000D /* ImageDetails */,
 				84C0DE00000000000000000F /* CoreUI */,
 				84C0DE000000000000000011 /* CoreAssets */,
+				84C0DE000000000000000013 /* CoreTracker */,
+				84C0DE000000000000000015 /* CoreTrackerImpl */,
 			);
 			productName = TheMilkyWay;
 			productReference = 848A45712745567200F3D2CE /* TheMilkyWay.app */;
@@ -538,6 +544,14 @@
 		84C0DE000000000000000011 /* CoreAssets */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreAssets;
+		};
+		84C0DE000000000000000013 /* CoreTracker */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreTracker;
+		};
+		84C0DE000000000000000015 /* CoreTrackerImpl */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreTrackerImpl;
 		};
 		84C0DE000000000000000001 /* CoreAPI */ = {
 			isa = XCSwiftPackageProductDependency;

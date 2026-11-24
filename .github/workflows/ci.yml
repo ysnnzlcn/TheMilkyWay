@@ -43,6 +43,14 @@ jobs:
           test -n "$id"
           echo "SIMULATOR_ID=$id" >> "$GITHUB_ENV"
 
+      # Downloaded packages (TCA and its dependencies), reused until Package.resolved changes.
+      - name: Cache packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/SourcePackages
+          key: spm-${{ runner.os }}-${{ hashFiles('TheMilkyWay.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+
       # Warnings are errors through the project and package settings: passed here they would reach TCA too.
       - name: Build and test
         run: |
@@ -50,6 +58,17 @@ jobs:
             -workspace TheMilkyWay.xcworkspace \
             -scheme TheMilkyWayDebug \
             -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages" \
+            -resultBundlePath "$RUNNER_TEMP/TestResults.xcresult" \
             -skipMacroValidation \
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO
+
+      # On failure, the full results (logs, failing tests) can be downloaded and opened in Xcode.
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: ${{ runner.temp }}/TestResults.xcresult
+          retention-days: 7

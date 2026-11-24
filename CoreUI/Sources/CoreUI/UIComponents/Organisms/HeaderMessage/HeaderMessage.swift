@@ -5,6 +5,7 @@
 
 import CoreAssets
 import CoreBase
+import CoreTracker
 import SwiftUI
 
 public extension View {
@@ -26,6 +27,8 @@ public struct HeaderMessage: ViewModifier {
         fileprivate let systemImage: SystemImage
         /// "Try again" on a failed load; `nil` for an empty state.
         fileprivate let retry: (() -> Void)?
+        /// What went wrong, for tracking; `nil` for an empty state.
+        fileprivate let error: AppError?
 
         /// A failed load with the error's copy (`AppError+Strings`) and "Try again". `nil` when there is no error.
         public init?(error: AppError?, retry: @escaping () -> Void) {
@@ -35,6 +38,7 @@ public struct HeaderMessage: ViewModifier {
             self.description = copy.description
             self.systemImage = copy.systemImage
             self.retry = retry
+            self.error = error
         }
 
         /// An empty state.
@@ -43,9 +47,10 @@ public struct HeaderMessage: ViewModifier {
             self.description = description
             self.systemImage = systemImage
             self.retry = nil
+            self.error = nil
         }
 
-        fileprivate var isError: Bool { retry != nil }
+        fileprivate var isError: Bool { error != nil }
 
         public static func == (lhs: UIModel, rhs: UIModel) -> Bool {
             lhs.title == rhs.title
@@ -62,17 +67,18 @@ public struct HeaderMessage: ViewModifier {
     }
 
     public func body(content: Content) -> some View {
-        content.overlay {
+        // The screen comes from the `BaseContentView` inside, for tracking.
+        content.overlayPreferenceValue(ShownScreenKey.self) { screen in
             ZStack {
                 if let model {
-                    message(model)
+                    message(model, on: screen)
                 }
             }
             .animation(.easeInOut(duration: DS.Motion.fast), value: model)
         }
     }
 
-    private func message(_ model: UIModel) -> some View {
+    private func message(_ model: UIModel, on screen: ScreenTrack?) -> some View {
         ContentUnavailableView {
             Label(model.title, systemImage: model.systemImage)
         } description: {
@@ -87,16 +93,18 @@ public struct HeaderMessage: ViewModifier {
         // Covers the content only: by default a background reaches into the safe area and hides the large title.
         .background(DS.Colors.bg, ignoresSafeAreaEdges: [])
         .transition(.opacity)
-        .onAppear { report(model) }
+        .onAppear { report(model, on: screen) }
     }
 
-    private func report(_ model: UIModel) {
+    /// Every message is logged; a failed load is also tracked.
+    private func report(_ model: UIModel, on screen: ScreenTrack?) {
         let text = [model.title, model.description].compactMap { $0 }.joined(separator: " / ")
-        if model.isError {
-            Log.warning("Error message: \(text)", .messages)
-        } else {
+        guard let error = model.error else {
             Log.info("Message: \(text)", .messages)
+            return
         }
+        Log.warning("Error message: \(text)", .messages)
+        trackFromUI(.error(.errorShown(error: error.trackingName, presentation: .header, screen: screen)))
     }
 }
 

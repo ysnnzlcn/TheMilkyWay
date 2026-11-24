@@ -17,6 +17,8 @@ public enum Log {
         case api
         case images
         case favorites
+        /// Every tracked event (`LogTrackerProvider`).
+        case tracker
     }
 
     public static func debug(_ message: String, _ category: Category, file: String = #fileID, line: Int = #line) {
