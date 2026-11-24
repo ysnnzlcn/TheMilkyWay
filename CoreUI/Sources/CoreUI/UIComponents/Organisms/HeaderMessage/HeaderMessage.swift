@@ -84,7 +84,8 @@ public struct HeaderMessage: ViewModifier {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DS.Colors.bg)
+        // Covers the content only: by default a background reaches into the safe area and hides the large title.
+        .background(DS.Colors.bg, ignoresSafeAreaEdges: [])
         .transition(.opacity)
         .onAppear { report(model) }
     }
