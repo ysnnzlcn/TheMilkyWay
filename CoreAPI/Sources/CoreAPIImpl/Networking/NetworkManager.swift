@@ -45,13 +45,13 @@ struct NetworkManager: Requestable {
             let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
             guard (200...299).contains(statusCode) else {
                 Log.error("\(target.path) failed with status \(statusCode)", .api)
-                return .failure(.api(.server))
+                return .failure(.network(.server))
             }
             return decode(type, from: data, path: target.path)
         } catch {
             let appError = Self.appError(from: error)
             // Cancelling is normal (a newer search replaced this one).
-            if appError == .api(.cancelled) {
+            if appError == .network(.cancelled) {
                 Log.debug("\(target.path) cancelled", .api)
             } else {
                 Log.warning("\(target.path) failed: \(appError)", .api)
@@ -72,8 +72,6 @@ struct NetworkManager: Requestable {
 
         var request = URLRequest(url: url, timeoutInterval: target.requestTimeout ?? requestTimeout)
         request.httpMethod = target.method.rawValue
-        request.allHTTPHeaderFields = target.headers
-        request.httpBody = target.body
         return request
     }
 
@@ -83,7 +81,7 @@ struct NetworkManager: Requestable {
         } catch {
             // Only the field path: the full error can quote the response.
             Log.error("\(path) decoding failed at \(Self.codingPath(of: error))", .api)
-            return .failure(.api(.decoding))
+            return .failure(.network(.decoding))
         }
     }
 
@@ -101,18 +99,18 @@ struct NetworkManager: Requestable {
     }
 
     private static func appError(from error: any Error) -> AppError {
-        if error is CancellationError { return .api(.cancelled) }
-        guard let urlError = error as? URLError else { return .api(.server) }
+        if error is CancellationError { return .network(.cancelled) }
+        guard let urlError = error as? URLError else { return .network(.server) }
 
         switch urlError.code {
         case .cancelled:
-            return .api(.cancelled)
+            return .network(.cancelled)
         case .timedOut:
-            return .api(.timeout)
+            return .network(.timeout)
         case .notConnectedToInternet, .networkConnectionLost, .dataNotAllowed:
-            return .api(.offline)
+            return .network(.offline)
         default:
-            return .api(.server)
+            return .network(.server)
         }
     }
 }

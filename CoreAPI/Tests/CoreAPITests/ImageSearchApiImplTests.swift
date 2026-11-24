@@ -87,7 +87,6 @@ struct ImageSearchApiImplTests {
         let result = try decode(Data(json.utf8)).page(for: .init(query: "", page: page), pageSize: 50)
 
         #expect(result.hasNextPage == expected)
-        #expect(result.totalHits == totalHits)
     }
 
     // MARK: Helpers
@@ -118,6 +117,6 @@ private actor RequestableSpy: Requestable {
 
     func sendRequest<T: Decodable & Sendable>(type: T.Type, target: any NetworkTarget) async -> Result<T, AppError> {
         callsCount += 1
-        return .failure(.api(.server))
+        return .failure(.network(.server))
     }
 }

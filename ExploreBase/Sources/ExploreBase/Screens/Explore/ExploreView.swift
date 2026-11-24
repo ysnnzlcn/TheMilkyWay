@@ -51,7 +51,7 @@ public struct ExploreView: View {
 private extension ExploreView {
 
     var cards: [ImageCard.UIModel] {
-        store.images.map { ImageCard.UIModel(id: $0.id, title: $0.title, imageURL: $0.thumbnailURL) }
+        store.images.map(ImageCard.UIModel.init(image:))
     }
 
     /// A failed first page, else "No results", else nothing.

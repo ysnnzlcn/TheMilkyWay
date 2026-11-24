@@ -1,6 +1,30 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "favoriteButton.add" : {
+      "comment" : "Favorite button when the image isn't saved yet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to Favorites"
+          }
+        }
+      }
+    },
+    "favoriteButton.remove" : {
+      "comment" : "Favorite button when the image is saved.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from Favorites"
+          }
+        }
+      }
+    },
     "toast.errorAnnouncement" : {
       "comment" : "VoiceOver announcement for an error toast. %@ is the toast's text.",
       "extractionState" : "manual",

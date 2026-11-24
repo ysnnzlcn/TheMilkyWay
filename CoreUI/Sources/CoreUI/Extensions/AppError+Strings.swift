@@ -6,47 +6,46 @@
 import CoreAssets
 import CoreBase
 
-/// What an error shows. The only place error text is chosen; it comes from the `errors` String Catalog.
+/// How an error shows. The only place error text and its look are chosen; the text comes from the `errors` String
+/// Catalog. A full-screen error's button is always "Try again" (`L10n.Errors.retry`).
 public struct ErrorCopy: Equatable, Sendable {
     /// Full-screen message (`HeaderMessage`).
     public let title: String
     public let description: String
-    public let buttonTitle: String
     public let systemImage: SystemImage
     /// Error toast.
     public let toastText: String
+    public let toastStatus: ToastUIModel.Status
 }
 
 public extension AppError {
 
     var copy: ErrorCopy {
         switch self {
-        case .api(.offline):
+        case .network(.offline):
             ErrorCopy(
                 title: L10n.Errors.offlineTitle,
                 description: L10n.Errors.offlineDescription,
-                buttonTitle: L10n.Errors.retry,
                 systemImage: .wifiSlash,
-                toastText: L10n.Errors.offlineToast
+                toastText: L10n.Errors.offlineToast,
+                toastStatus: .noConnection
             )
-        case .api(.timeout):
+        case .network(.timeout):
             ErrorCopy(
                 title: L10n.Errors.genericTitle,
                 description: L10n.Errors.timeoutDescription,
-                buttonTitle: L10n.Errors.retry,
                 systemImage: .exclamationmarkTriangle,
-                toastText: L10n.Errors.genericToast
+                toastText: L10n.Errors.genericToast,
+                toastStatus: .error
             )
-        case .api, .unexpected:
+        case .network, .storage, .unexpected:
             ErrorCopy(
                 title: L10n.Errors.genericTitle,
                 description: L10n.Errors.genericDescription,
-                buttonTitle: L10n.Errors.retry,
                 systemImage: .exclamationmarkTriangle,
-                toastText: L10n.Errors.genericToast
+                toastText: L10n.Errors.genericToast,
+                toastStatus: .error
             )
         }
     }
-
-    var isOffline: Bool { self == .api(.offline) }
 }

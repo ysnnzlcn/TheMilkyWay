@@ -26,8 +26,8 @@ struct ImageSearchApiStubsTests {
         let byKeyword = try await api.searchImages(.init(query: "chandrayaan")).get()
         let none = try await api.searchImages(.init(query: "mars")).get()
 
-        #expect(byTitle.totalHits > 0)
-        #expect(byTitle.totalHits == byKeyword.totalHits)
+        #expect(!byTitle.images.isEmpty)
+        #expect(byTitle.images == byKeyword.images)
         #expect(none.images.isEmpty)
         #expect(!none.hasNextPage)
     }

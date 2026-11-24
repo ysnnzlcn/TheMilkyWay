@@ -15,7 +15,7 @@ public extension View {
     }
 }
 
-/// A full-screen message over a screen's content: a failed load (with a retry button) or an empty state.
+/// A full-screen message over a screen's content: a failed load with "Try again", or an empty state with no button.
 /// Built on the system's `ContentUnavailableView`.
 public struct HeaderMessage: ViewModifier {
 
@@ -24,9 +24,8 @@ public struct HeaderMessage: ViewModifier {
         fileprivate let title: String
         fileprivate let description: String?
         fileprivate let systemImage: SystemImage
-        fileprivate let buttonTitle: String?
-        fileprivate let buttonAction: (() -> Void)?
-        fileprivate let isError: Bool
+        /// "Try again" on a failed load; `nil` for an empty state.
+        fileprivate let retry: (() -> Void)?
 
         /// A failed load with the error's copy (`AppError+Strings`) and "Try again". `nil` when there is no error.
         public init?(error: AppError?, retry: @escaping () -> Void) {
@@ -35,32 +34,24 @@ public struct HeaderMessage: ViewModifier {
             self.title = copy.title
             self.description = copy.description
             self.systemImage = copy.systemImage
-            self.buttonTitle = copy.buttonTitle
-            self.buttonAction = retry
-            self.isError = true
+            self.retry = retry
         }
 
-        /// An empty state, with an optional button.
-        public init(
-            title: String,
-            description: String?,
-            systemImage: SystemImage,
-            buttonTitle: String? = nil,
-            buttonAction: (() -> Void)? = nil
-        ) {
+        /// An empty state.
+        public init(title: String, description: String?, systemImage: SystemImage) {
             self.title = title
             self.description = description
             self.systemImage = systemImage
-            self.buttonTitle = buttonTitle
-            self.buttonAction = buttonAction
-            self.isError = false
+            self.retry = nil
         }
+
+        fileprivate var isError: Bool { retry != nil }
 
         public static func == (lhs: UIModel, rhs: UIModel) -> Bool {
             lhs.title == rhs.title
                 && lhs.description == rhs.description
                 && lhs.systemImage == rhs.systemImage
-                && lhs.buttonTitle == rhs.buttonTitle
+                && lhs.isError == rhs.isError
         }
     }
 
@@ -87,13 +78,14 @@ public struct HeaderMessage: ViewModifier {
         } description: {
             model.description.map { Text($0) }
         } actions: {
-            if let buttonTitle = model.buttonTitle, let buttonAction = model.buttonAction {
-                Button(buttonTitle, action: buttonAction)
+            if let retry = model.retry {
+                Button(L10n.Errors.retry, action: retry)
                     .buttonStyle(.bordered)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DS.Colors.bg)
+        // Covers the content only: by default a background reaches into the safe area and hides the large title.
+        .background(DS.Colors.bg, ignoresSafeAreaEdges: [])
         .transition(.opacity)
         .onAppear { report(model) }
     }
@@ -111,10 +103,10 @@ public struct HeaderMessage: ViewModifier {
 #Preview("Errors") {
     TabView {
         Tab("Offline", systemImage: SystemImage.wifiSlash.rawValue) {
-            Color.clear.headerMessage(.init(error: .api(.offline)) {})
+            Color.clear.headerMessage(.init(error: .network(.offline)) {})
         }
         Tab("Other", systemImage: SystemImage.exclamationmarkTriangle.rawValue) {
-            Color.clear.headerMessage(.init(error: .api(.server)) {})
+            Color.clear.headerMessage(.init(error: .network(.server)) {})
         }
     }
 }

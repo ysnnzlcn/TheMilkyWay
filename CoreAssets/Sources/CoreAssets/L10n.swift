@@ -10,12 +10,34 @@ import Foundation
 /// Wraps the symbols Xcode generates for each catalog (internal to this module), so a wrong key fails to compile.
 public enum L10n {
 
+    public enum Core {
+
+        public static var tabsExplore: String { String(localized: .Core.tabsExplore) }
+        public static var tabsFavorites: String { String(localized: .Core.tabsFavorites) }
+    }
+
     public enum Coreui {
+
+        public static var favoriteButtonAdd: String { String(localized: .Coreui.favoriteButtonAdd) }
+        public static var favoriteButtonRemove: String { String(localized: .Coreui.favoriteButtonRemove) }
 
         /// "Error, %@"
         public static func toastErrorAnnouncement(_ text: String) -> String {
             String(localized: .Coreui.toastErrorAnnouncement(text))
         }
+    }
+
+    public enum Favorites {
+
+        public static var emptyDescription: String { String(localized: .Favorites.emptyDescription) }
+        public static var emptyTitle: String { String(localized: .Favorites.emptyTitle) }
+        public static var title: String { String(localized: .Favorites.title) }
+    }
+
+    public enum ImageDetails {
+
+        public static var favoriteAdded: String { String(localized: .ImageDetails.favoriteAdded) }
+        public static var favoriteRemoved: String { String(localized: .ImageDetails.favoriteRemoved) }
     }
 
     public enum Explore {

@@ -14,6 +14,7 @@ let package = Package(
     dependencies: [
         .package(path: "../CoreAssets"),
         .package(path: "../CoreBase"),
+        .package(path: "../CoreLogic"),
         .package(path: "../CoreUI"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "1.26.2")),
     ],
@@ -23,7 +24,18 @@ let package = Package(
             dependencies: [
                 .product(name: "CoreAssets", package: "CoreAssets"),
                 .product(name: "CoreBase", package: "CoreBase"),
+                .product(name: "CoreLogic", package: "CoreLogic"),
                 .product(name: "CoreUI", package: "CoreUI"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ],
+            swiftSettings: strict
+        ),
+        .testTarget(
+            name: "ImageDetailsTests",
+            dependencies: [
+                "ImageDetails",
+                .product(name: "CoreBase", package: "CoreBase"),
+                .product(name: "CoreLogicMocks", package: "CoreLogic"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ],
             swiftSettings: strict

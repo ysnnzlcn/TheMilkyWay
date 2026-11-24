@@ -10,22 +10,23 @@ import SwiftUI
 @main
 struct TheMilkyWayApp: App {
 
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
     /// Created on first use, after `AppInterface.setup` in `init`.
     static let appState = Store(initialState: AppState.State()) {
         AppState()
     }
 
+    /// Tests in the app target launch the real app next to them. While they run, the app sets nothing up (no store
+    /// on disk is opened) and shows nothing.
+    private static let isRunningTests = TestContext.current != nil
+
     init() {
+        guard !Self.isRunningTests else { return }
         AppInterface.setup(.current)
     }
 
     var body: some Scene {
         WindowGroup {
-            // Tests in the app target launch the real app next to them; its work would then use dependencies in a
-            // test context. While tests run, the app shows nothing.
-            if TestContext.current == nil {
+            if !Self.isRunningTests {
                 AppView(store: Self.appState)
             }
         }

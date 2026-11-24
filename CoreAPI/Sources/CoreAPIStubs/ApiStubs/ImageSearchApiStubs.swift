@@ -7,7 +7,8 @@ import CoreAPI
 import CoreBase
 import Foundation
 
-/// Searches `NASAImageDTO.stubs` by title and keywords, in pages, after a short delay.
+/// Searches `NASAImageDTO.stubs` by title and keywords, in pages, after a short delay. Used when the app runs
+/// offline (`AppInterface.apiEnvironment`); it accepts the same requests as the live API.
 actor ImageSearchApiStubs: ImageSearchApi {
 
     static let pageSize = 20
@@ -20,9 +21,9 @@ actor ImageSearchApiStubs: ImageSearchApi {
 
     func searchImages(_ request: SearchImagesRequest) async -> Result<ImageSearchPageDTO, AppError> {
         try? await Task.sleep(for: delay)
-        guard request.page >= 1 else { return .failure(.unexpected("Pages start at 1, got \(request.page)")) }
+        if let error = request.validationError { return .failure(error) }
 
-        let query = request.query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let query = request.trimmedQuery
         let matches = NASAImageDTO.stubs.filter { image in
             query.isEmpty
                 || image.title.localizedStandardContains(query)
@@ -30,10 +31,6 @@ actor ImageSearchApiStubs: ImageSearchApi {
         }
         let start = (request.page - 1) * Self.pageSize
         let images = Array(matches.dropFirst(start).prefix(Self.pageSize))
-        return .success(ImageSearchPageDTO(
-            images: images,
-            totalHits: matches.count,
-            hasNextPage: start + images.count < matches.count
-        ))
+        return .success(ImageSearchPageDTO(images: images, hasNextPage: start + images.count < matches.count))
     }
 }

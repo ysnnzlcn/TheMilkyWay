@@ -15,6 +15,8 @@ let package = Package(
         .library(name: "CoreAPIImpl", targets: ["CoreAPIImpl"]),
         // Offline stubs. Only the app target and tests import this.
         .library(name: "CoreAPIStubs", targets: ["CoreAPIStubs"]),
+        // Test doubles. Only test targets import this, so they never ship in the app.
+        .library(name: "CoreAPIMocks", targets: ["CoreAPIMocks"]),
     ],
     dependencies: [
         .package(path: "../CoreBase"),
@@ -28,6 +30,7 @@ let package = Package(
         ),
         .target(name: "CoreAPIImpl", dependencies: ["CoreAPI"], path: "Sources/CoreAPIImpl", swiftSettings: strict),
         .target(name: "CoreAPIStubs", dependencies: ["CoreAPI"], path: "Sources/CoreAPIStubs", swiftSettings: strict),
+        .target(name: "CoreAPIMocks", dependencies: ["CoreAPI"], path: "Sources/CoreAPIMocks", swiftSettings: strict),
         .testTarget(
             name: "CoreAPITests",
             dependencies: ["CoreAPI", "CoreAPIImpl", "CoreAPIStubs"],

@@ -11,6 +11,12 @@
 		84C0DE000000000000000002 /* CoreAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000001 /* CoreAPI */; };
 		84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000003 /* CoreAPIImpl */; };
 		84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000005 /* CoreAPIStubs */; };
+		84C0DE000000000000000008 /* CoreLogic in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000007 /* CoreLogic */; };
+		84C0DE00000000000000000A /* CoreLogicImpl in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000009 /* CoreLogicImpl */; };
+		84C0DE00000000000000000C /* FavoritesBase in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE00000000000000000B /* FavoritesBase */; };
+		84C0DE00000000000000000E /* ImageDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE00000000000000000D /* ImageDetails */; };
+		84C0DE000000000000000010 /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE00000000000000000F /* CoreUI */; };
+		84C0DE000000000000000012 /* CoreAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 84C0DE000000000000000011 /* CoreAssets */; };
 		84F4583027455D1300A8A7C2 /* CoreBase in Frameworks */ = {isa = PBXBuildFile; productRef = 84F4582F27455D1300A8A7C2 /* CoreBase */; };
 /* End PBXBuildFile section */
 
@@ -22,19 +28,11 @@
 			remoteGlobalIDString = 848A45702745567200F3D2CE;
 			remoteInfo = TheMilkyWay;
 		};
-		848A45922745567400F3D2CE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 848A45692745567200F3D2CE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 848A45702745567200F3D2CE;
-			remoteInfo = TheMilkyWay;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		848A45712745567200F3D2CE /* TheMilkyWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheMilkyWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		848A45872745567400F3D2CE /* TheMilkyWayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheMilkyWayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		848A45912745567400F3D2CE /* TheMilkyWayUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheMilkyWayUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A000000000000000000002 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		84A000000000000000000003 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,11 +61,6 @@
 			path = TheMilkyWayTests;
 			sourceTree = "<group>";
 		};
-		84A00000000000000000000A /* TheMilkyWayUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TheMilkyWayUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,17 +73,16 @@
 				84C0DE000000000000000004 /* CoreAPIImpl in Frameworks */,
 				84C0DE000000000000000006 /* CoreAPIStubs in Frameworks */,
 				84877BF1274684DA000311FC /* ExploreBase in Frameworks */,
+				84C0DE000000000000000008 /* CoreLogic in Frameworks */,
+				84C0DE00000000000000000A /* CoreLogicImpl in Frameworks */,
+				84C0DE00000000000000000C /* FavoritesBase in Frameworks */,
+				84C0DE00000000000000000E /* ImageDetails in Frameworks */,
+				84C0DE000000000000000010 /* CoreUI in Frameworks */,
+				84C0DE000000000000000012 /* CoreAssets in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		848A45842745567400F3D2CE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		848A458E2745567400F3D2CE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -106,7 +98,6 @@
 				84A000000000000000000004 /* Configurations */,
 				84A000000000000000000008 /* TheMilkyWay */,
 				84A000000000000000000009 /* TheMilkyWayTests */,
-				84A00000000000000000000A /* TheMilkyWayUITests */,
 				848A45722745567200F3D2CE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,7 +107,6 @@
 			children = (
 				848A45712745567200F3D2CE /* TheMilkyWay.app */,
 				848A45872745567400F3D2CE /* TheMilkyWayTests.xctest */,
-				848A45912745567400F3D2CE /* TheMilkyWayUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,6 +145,12 @@
 				84C0DE000000000000000003 /* CoreAPIImpl */,
 				84C0DE000000000000000005 /* CoreAPIStubs */,
 				84877BF0274684DA000311FC /* ExploreBase */,
+				84C0DE000000000000000007 /* CoreLogic */,
+				84C0DE000000000000000009 /* CoreLogicImpl */,
+				84C0DE00000000000000000B /* FavoritesBase */,
+				84C0DE00000000000000000D /* ImageDetails */,
+				84C0DE00000000000000000F /* CoreUI */,
+				84C0DE000000000000000011 /* CoreAssets */,
 			);
 			productName = TheMilkyWay;
 			productReference = 848A45712745567200F3D2CE /* TheMilkyWay.app */;
@@ -181,27 +177,6 @@
 			productReference = 848A45872745567400F3D2CE /* TheMilkyWayTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		848A45902745567400F3D2CE /* TheMilkyWayUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 848A45A12745567400F3D2CE /* Build configuration list for PBXNativeTarget "TheMilkyWayUITests" */;
-			buildPhases = (
-				848A458D2745567400F3D2CE /* Sources */,
-				848A458E2745567400F3D2CE /* Frameworks */,
-				848A458F2745567400F3D2CE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				848A45932745567400F3D2CE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				84A00000000000000000000A /* TheMilkyWayUITests */,
-			);
-			name = TheMilkyWayUITests;
-			productName = TheMilkyWayUITests;
-			productReference = 848A45912745567400F3D2CE /* TheMilkyWayUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -216,10 +191,6 @@
 						CreatedOnToolsVersion = 13.1;
 					};
 					848A45862745567400F3D2CE = {
-						CreatedOnToolsVersion = 13.1;
-						TestTargetID = 848A45702745567200F3D2CE;
-					};
-					848A45902745567400F3D2CE = {
 						CreatedOnToolsVersion = 13.1;
 						TestTargetID = 848A45702745567200F3D2CE;
 					};
@@ -240,7 +211,6 @@
 			targets = (
 				848A45702745567200F3D2CE /* TheMilkyWay */,
 				848A45862745567400F3D2CE /* TheMilkyWayTests */,
-				848A45902745567400F3D2CE /* TheMilkyWayUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -254,13 +224,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		848A45852745567400F3D2CE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		848A458F2745567400F3D2CE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -284,13 +247,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		848A458D2745567400F3D2CE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -298,11 +254,6 @@
 			isa = PBXTargetDependency;
 			target = 848A45702745567200F3D2CE /* TheMilkyWay */;
 			targetProxy = 848A45882745567400F3D2CE /* PBXContainerItemProxy */;
-		};
-		848A45932745567400F3D2CE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 848A45702745567200F3D2CE /* TheMilkyWay */;
-			targetProxy = 848A45922745567400F3D2CE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -527,50 +478,6 @@
 			};
 			name = Release;
 		};
-		848A45A22745567400F3D2CE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8FRMHS5G89;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yasinnazlican.TheMilkyWayUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TheMilkyWay;
-			};
-			name = Debug;
-		};
-		848A45A32745567400F3D2CE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8FRMHS5G89;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yasinnazlican.TheMilkyWayUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TheMilkyWay;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -601,21 +508,36 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		848A45A12745567400F3D2CE /* Build configuration list for PBXNativeTarget "TheMilkyWayUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				848A45A22745567400F3D2CE /* Debug */,
-				848A45A32745567400F3D2CE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		84877BF0274684DA000311FC /* ExploreBase */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ExploreBase;
+		};
+		84C0DE000000000000000007 /* CoreLogic */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreLogic;
+		};
+		84C0DE000000000000000009 /* CoreLogicImpl */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreLogicImpl;
+		};
+		84C0DE00000000000000000B /* FavoritesBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FavoritesBase;
+		};
+		84C0DE00000000000000000D /* ImageDetails */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageDetails;
+		};
+		84C0DE00000000000000000F /* CoreUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreUI;
+		};
+		84C0DE000000000000000011 /* CoreAssets */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreAssets;
 		};
 		84C0DE000000000000000001 /* CoreAPI */ = {
 			isa = XCSwiftPackageProductDependency;

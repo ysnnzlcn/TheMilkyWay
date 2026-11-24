@@ -5,6 +5,10 @@
 
 import CoreAPI
 import CoreBase
+import CoreLogic
+
+// Private import: only the app target may see implementations.
+private import CoreLogicImpl
 
 @MainActor
 private(set) var mainTargetImports: MainTargetImports = .unimplemented()
@@ -28,8 +32,14 @@ enum AppInterface {
     @MainActor
     static func setup(_ appEnvironment: AppEnvironment) {
         let apiManager = setupCoreAPIModule(apiEnvironment(for: appEnvironment))
-        mainTargetImports = MainTargetImports(apiManager: apiManager)
+        setupCoreLogicModule()
+        mainTargetImports = MainTargetImports(
+            apiManager: apiManager,
+            favoritesService: CoreLogicImpl.coreLogicExports.favoritesService
+        )
         setupExploreBaseModule()
+        setupImageDetailsModule()
+        setupFavoritesBaseModule()
         Log.info("Set up with \(apiEnvironment(for: appEnvironment)) API", .app)
     }
 }
@@ -38,9 +48,10 @@ enum AppInterface {
 
 struct MainTargetImports {
     let apiManager: ApiManager
+    let favoritesService: FavoritesService
 
     @MainActor
     static func unimplemented() -> Self {
-        MainTargetImports(apiManager: ApiManagerUnimplemented())
+        MainTargetImports(apiManager: ApiManagerUnimplemented(), favoritesService: FavoritesServiceUnimplemented())
     }
 }
