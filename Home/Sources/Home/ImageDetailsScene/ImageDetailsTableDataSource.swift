@@ -45,15 +45,12 @@ public final class ImageDetailsTableDataSource: BaseDiffableDataSource<ImageDeta
                 self?.update(items: items)
             })
     }
-
-    deinit {
-        cancellable?.cancel()
-    }
 }
 
 // MARK: Cell Types
 
-public enum ImageDetailsCellType: Equatable {
+/// The attributed text is never mutated after it's created.
+public enum ImageDetailsCellType: Equatable, @unchecked Sendable {
 
     case imageHeaderCell(_ url: String?)
     case plainTextCell(_ text: NSAttributedString)

@@ -19,9 +19,10 @@ This is a sample iOS project created using NASA search image API.
 ## Technologies
 
 * iOS 27+
-* Swift 6.4 tools (Swift 5 language mode during the migration)
-* UIKit
-* Combine
+* Swift 6 with strict concurrency
+* async/await
+* UIKit (moving to SwiftUI)
+* Combine (view bindings only, until the SwiftUI migration)
 
 
 ## Architecture

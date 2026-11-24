@@ -9,15 +9,15 @@ TheMilkyWay is a sample iOS app for browsing and searching NASA's image library
 
 ## Status
 
-The app is moving from UIKit, MVVM-C and Combine to SwiftUI, TCA and Swift Concurrency. The current screens are UIKit,
-hosted by `LegacyRootView` until they are replaced. Swift 5 language mode stays on until the concurrency migration ends.
+The app is moving from UIKit and MVVM-C to SwiftUI and TCA. The current screens are UIKit, hosted by `LegacyRootView`
+until they are replaced, and still bind to their view models with Combine. Networking uses async/await.
 
 ## Build
 
 Open `TheMilkyWay.xcworkspace`, not the `.xcodeproj`: the workspace is what connects the local packages.
 
 - **Minimum iOS:** 27.0. Never add `#available` checks for iOS 27 or older.
-- **Swift tools:** 6.4.
+- **Swift:** tools version 6.4, Swift 6 language mode with strict concurrency.
 - **Schemes:** `TheMilkyWayDebug` (development and tests), `TheMilkyWay` (Release).
 - **Per-build values** (bundle id, display name) live in `Configurations/<Name>.xcconfig`. Never set them in the
   target's build settings.
@@ -43,6 +43,7 @@ Every module is a local Swift package, and packages reference each other with `.
 ## Conventions
 
 - The app uses the SwiftUI `App` lifecycle with `WindowGroup`. Do not add a `UIWindow` or `SceneDelegate`.
+- Async APIs and services return `Result<T, AppError>`. Error text is produced only in CoreUI `AppError+Strings`.
 - Keep comments short.
 - Do not build ahead of the current migration phase.
 

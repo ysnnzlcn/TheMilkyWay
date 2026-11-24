@@ -7,7 +7,8 @@
 
 import UIKit
 
-final public class TemporaryImageCache {
+/// `NSCache` is thread-safe and is the only stored state.
+final public class TemporaryImageCache: @unchecked Sendable {
 
     // MARK: Shared
     

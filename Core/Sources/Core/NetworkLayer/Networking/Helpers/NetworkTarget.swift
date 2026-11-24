@@ -1,22 +1,22 @@
 //
 //  NetworkTarget.swift
-//  
+//
 //
 //  Created by Yasin Nazlican on 17.11.2021.
 //
 
 import Foundation
 
-public protocol NetworkTarget {
+public protocol NetworkTarget: Sendable {
 
-    /// The target's base `URL`.
-    var baseURL: URL { get }
+    /// The server address, ending in `/`.
+    var baseURL: String { get }
 
-    /// The path to be appended to `baseURL` to form the full `URL`.
-    var url: URL { get }
+    /// The path appended to `baseURL`.
+    var path: String { get }
 
-    /// To set timeout for each request.
-    var requestTimeout: Float? { get }
+    /// Overrides the default timeout.
+    var requestTimeout: TimeInterval? { get }
 
     /// The HTTP method used in the request.
     var method: HTTPMethod { get }
@@ -33,6 +33,5 @@ public protocol NetworkTarget {
 
 extension NetworkTarget {
 
-    /// Set our timeout to default for all at the beginning.
-    public var requestTimeout: Float? { nil }
+    public var requestTimeout: TimeInterval? { nil }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class BaseDiffableDataSource<T>: UITableViewDiffableDataSource<
+open class BaseDiffableDataSource<T: Sendable>: UITableViewDiffableDataSource<
     BaseDiffableDataSource.Section,
     BaseDiffableDataSource.Item
 > {
@@ -32,7 +32,7 @@ open class BaseDiffableDataSource<T>: UITableViewDiffableDataSource<
 
 extension BaseDiffableDataSource {
 
-    public struct Item: Hashable {
+    public struct Item: Hashable, Sendable {
 
         private let identifier = UUID()
         public let cell: T
@@ -50,7 +50,7 @@ extension BaseDiffableDataSource {
         }
     }
 
-    public struct Section: Hashable {
+    public struct Section: Hashable, Sendable {
 
         private let identifier = UUID()
         public let items: [Item]

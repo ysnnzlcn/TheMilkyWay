@@ -8,8 +8,9 @@
 import Core
 import UIKit
 
-public typealias AlertAction = (title: String, action: VoidClosure?)
+public typealias AlertAction = (title: String, action: (@MainActor () -> Void)?)
 
+@MainActor
 public enum GlobalAlert {
 
     // MARK: Cases

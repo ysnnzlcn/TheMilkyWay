@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: NASAImageResponse
 
-public struct NASAImageResponse: Decodable {
+public struct NASAImageResponse: Decodable, Sendable {
 
     public let collection: NASAImageResponseCollection
 
@@ -20,7 +20,7 @@ public struct NASAImageResponse: Decodable {
 
 // MARK: NASAImageResponseCollection
 
-public struct NASAImageResponseCollection: Decodable {
+public struct NASAImageResponseCollection: Decodable, Sendable {
 
     public let items: [NASAImage]
 
@@ -31,7 +31,7 @@ public struct NASAImageResponseCollection: Decodable {
 
 // MARK: NASAImage
 
-public struct NASAImage: Decodable, Equatable {
+public struct NASAImage: Decodable, Equatable, Sendable {
 
     public let href: String
     public let info: [NASAImageInfo]
@@ -60,7 +60,7 @@ public struct NASAImage: Decodable, Equatable {
 
 // MARK: NASAImageInfo
 
-public struct NASAImageInfo: Decodable {
+public struct NASAImageInfo: Decodable, Sendable {
 
     public let center: String
     public let title: String
@@ -92,7 +92,7 @@ public struct NASAImageInfo: Decodable {
 
 // MARK: NASAImageLink
 
-public struct NASAImageLink: Decodable {
+public struct NASAImageLink: Decodable, Sendable {
 
     public let href: String
     public let rel: String

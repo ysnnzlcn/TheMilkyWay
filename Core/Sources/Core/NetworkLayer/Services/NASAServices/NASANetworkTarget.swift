@@ -1,65 +1,55 @@
 //
 //  NASANetworkTarget.swift
-//  
+//
 //
 //  Created by Yasin Nazlican on 17.11.2021.
 //
 
 import Foundation
 
-public enum NASANetworkTarget {
+public enum NASANetworkTarget: Sendable {
 
     case searchImages(key: String)
 }
 
 extension NASANetworkTarget: NetworkTarget {
 
-    public var baseURL: URL {
-        guard let url = URL(string: "https://images-api.nasa.gov/") else {
-            fatalError("Please provide a valid base url.")
-        }
-        return url
+    public var baseURL: String {
+        "https://images-api.nasa.gov/"
     }
 
-    public var url: URL {
-        var path = ""
-
+    public var path: String {
         switch self {
         case .searchImages:
-            path = "search"
+            "search"
         }
-
-        guard let url = URL(string: baseURL.absoluteString + path) else {
-            fatalError("Please provide a valid path url.")
-        }
-        return url
     }
 
     public var method: HTTPMethod {
         switch self {
         case .searchImages:
-            return .get
+            .get
         }
     }
 
     public var headers: [String: String]? {
         switch self {
         case .searchImages:
-            return nil
+            nil
         }
     }
 
     public var body: Data? {
         switch self {
         case .searchImages:
-            return nil
+            nil
         }
     }
 
     public var queryItems: [URLQueryItem] {
         switch self {
         case .searchImages(let text):
-            return [.init(name: "q", value: text)]
+            [.init(name: "q", value: text)]
         }
     }
 }

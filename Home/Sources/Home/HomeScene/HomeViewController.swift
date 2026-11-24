@@ -10,6 +10,7 @@ import Core
 import CoreUI
 import UIKit
 
+@MainActor
 public protocol HomeViewControllerCoordinatorDelegate: AnyObject {
 
     func homeViewControllerDidSelect(

@@ -21,6 +21,5 @@ let package = Package(
             ]
         ),
         .testTarget(name: "HomeTests", dependencies: ["Home"]),
-    ],
-    swiftLanguageModes: [.v5]
+    ]
 )

@@ -1,18 +1,17 @@
 //
 //  AsyncImageView.swift
-//  
+//
 //
 //  Created by Yasin Nazlican on 18.11.2021.
 //
 
-import Combine
 import UIKit
 
 public class AsyncImageView: UIImageView {
 
     // MARK: Private Variables
 
-    private var cancellable: AnyCancellable?
+    private var loadTask: Task<Void, Never>?
 
     // MARK: Public Variables
 
@@ -21,44 +20,38 @@ public class AsyncImageView: UIImageView {
     // MARK: Public Methods
 
     public func load(url: URL, cache: TemporaryImageCache) {
-        /// Check if it is currently loading and image.
-        guard !isLoading else { return }
+        cancelLoading()
 
-        /// Get it from the cache if its available.
         if let image = cache[url] {
             self.image = image
             return
         }
 
-        /// Send request to get image.
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data) }
-            .replaceError(with: nil)
-            .handleEvents(
-                receiveSubscription: { [weak self] _ in self?.onStart() },
-                receiveOutput: { cache[url] = $0 },
-                receiveCompletion: { [weak self] _ in self?.onFinish() },
-                receiveCancel: { [weak self] in self?.onFinish() }
-            )
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.image = $0 }
+        isLoading = true
+        loadTask = Task { [weak self] in
+            let image = await Self.fetchImage(url: url, cache: cache)
+            guard !Task.isCancelled else { return }
+            self?.image = image
+            self?.isLoading = false
+        }
+    }
+
+    public func cancelLoading() {
+        loadTask?.cancel()
+        loadTask = nil
+        isLoading = false
     }
 
     // MARK: Private Methods
 
-    private func onStart() {
-        isLoading = true
+    private nonisolated static func fetchImage(url: URL, cache: TemporaryImageCache) async -> UIImage? {
+        guard let (data, _) = try? await URLSession.shared.data(from: url) else { return nil }
+        guard let image = UIImage(data: data) else { return nil }
+        cache[url] = image
+        return image
     }
 
-    private func onFinish() {
-        isLoading = false
-    }
-
-    private func cancel() {
-        cancellable?.cancel()
-    }
-
-    deinit {
-        cancel()
+    isolated deinit {
+        loadTask?.cancel()
     }
 }

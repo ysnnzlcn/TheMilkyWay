@@ -14,6 +14,5 @@ let package = Package(
     targets: [
         .target(name: "CoreUI", dependencies: [.product(name: "Core", package: "Core")]),
         .testTarget(name: "CoreUITests", dependencies: ["CoreUI"]),
-    ],
-    swiftLanguageModes: [.v5]
+    ]
 )

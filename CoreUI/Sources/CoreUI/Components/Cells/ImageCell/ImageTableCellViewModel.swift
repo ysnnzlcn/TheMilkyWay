@@ -8,7 +8,7 @@
 import Core
 import UIKit
 
-public final class ImageTableCellViewModel {
+public final class ImageTableCellViewModel: Sendable {
 
     // MARK: Public Variables
 
@@ -36,10 +36,12 @@ public final class ImageTableCellViewModel {
 
     // MARK: Private Read-Only
 
-    private let subtitleAttributes: [NSAttributedString.Key: Any]  = [
-        .foregroundColor: UIColor.secondaryTextColor,
-        .font: UIFont.appFont(size: 14, weight: .regular)
-    ]
+    private var subtitleAttributes: [NSAttributedString.Key: Any] {
+        [
+            .foregroundColor: UIColor.secondaryTextColor,
+            .font: UIFont.appFont(size: 14, weight: .regular),
+        ]
+    }
 
     private var titleText: NSAttributedString {
         .init(
