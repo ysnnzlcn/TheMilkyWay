@@ -29,7 +29,8 @@ xcodebuild -workspace TheMilkyWay.xcworkspace -scheme TheMilkyWayDebug \
   -destination 'platform=iOS Simulator,name=iPhone 18 Pro Max' -skipMacroValidation test
 ```
 
-CI runs strict SwiftLint, build and tests from `.github/workflows/ci.yml`. Compiler warnings are errors in our own
+CI runs strict SwiftLint, build and tests from `.github/workflows/ci.yml`. SwiftLint is pinned there
+(`SWIFTLINT_VERSION`); use the same version locally, and change both together. Compiler warnings are errors in our own
 code, set per target: `strict` swift settings in every `Package.swift` and the project's build settings. Never pass
 `SWIFT_TREAT_WARNINGS_AS_ERRORS` on the command line: it reaches TCA's packages and fails the build. A new package or
 target gets `swiftSettings: strict`.

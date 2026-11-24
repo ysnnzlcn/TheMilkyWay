@@ -97,9 +97,9 @@ private final class ImageStubURLProtocol: URLProtocol, @unchecked Sendable {
         state.withLock { $0 = State(status: status, data: data) }
     }
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
+    override static func canInit(with request: URLRequest) -> Bool { true }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
         let (status, data) = Self.state.withLock { state in
