@@ -6,6 +6,7 @@
 import ComposableArchitecture
 import CoreBase
 import CoreLogicMocks
+import CoreTrackerMocks
 import Testing
 @testable import ImageDetails
 
@@ -13,6 +14,7 @@ import Testing
 struct ImageDetailsCoreTests {
 
     private let image = NASAImageDTO(id: "1", title: "Andromeda Galaxy")
+    private let tracker = TrackerServiceMock()
 
     @Test func firstAppearShowsWhetherItIsSaved() async {
         let service = FavoritesServiceMock(favorites: [image])
@@ -64,6 +66,8 @@ struct ImageDetailsCoreTests {
             $0.confirmation = .added
         }
         #expect(await service.favorites == [image])
+        await store.finish()
+        #expect(tracker.events == [.product(.favoriteAdded(imageID: "1"))])
     }
 
     @Test func tapRemovesAndConfirms() async {
@@ -78,6 +82,8 @@ struct ImageDetailsCoreTests {
         }
         #expect(await service.removedIDs == ["1"])
         #expect(await service.favorites.isEmpty)
+        await store.finish()
+        #expect(tracker.events == [.product(.favoriteRemoved(imageID: "1"))])
     }
 
     @Test func failedSaveKeepsTheButtonAndShowsErrorUntilDismissed() async {
@@ -91,6 +97,8 @@ struct ImageDetailsCoreTests {
         }
         #expect(await service.addedIDs == ["1"])
         await store.send(.onToastDismiss) { $0.error = nil }
+        // A failed save changed nothing, so nothing is tracked.
+        #expect(tracker.events.isEmpty)
     }
 
     @Test func tapDoesNothingWhileSavingOrBeforeTheStateIsKnown() async {
@@ -103,8 +111,9 @@ struct ImageDetailsCoreTests {
             let service = FavoritesServiceMock()
             let store = TestStore(initialState: state) {
                 ImageDetailsCore()
-            } withDependencies: {
+            } withDependencies: { [tracker] in
                 $0.favoritesClient = FavoritesClient(service: { service })
+                $0.trackerClient = TrackerClient(service: { tracker })
             }
 
             await store.send(.onFavoriteTap)
@@ -149,8 +158,9 @@ struct ImageDetailsCoreTests {
         state.isFavorite = isFavorite
         return TestStore(initialState: state) {
             ImageDetailsCore()
-        } withDependencies: {
+        } withDependencies: { [tracker] in
             $0.favoritesClient = FavoritesClient(service: { service })
+            $0.trackerClient = TrackerClient(service: { tracker })
         }
     }
 }

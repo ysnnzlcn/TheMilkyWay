@@ -9,8 +9,7 @@ TheMilkyWay is a sample iOS app for browsing and searching NASA's image library
 
 ## Status
 
-SwiftUI and TCA throughout, networking with async/await. Explore, Image details and Favorites (SwiftData) are built;
-an on-device AI explanation comes next.
+SwiftUI and TCA throughout, networking with async/await. Explore, Image details and Favorites (SwiftData) are built.
 
 ## Build
 
@@ -29,7 +28,8 @@ xcodebuild -workspace TheMilkyWay.xcworkspace -scheme TheMilkyWayDebug \
   -destination 'platform=iOS Simulator,name=iPhone 18 Pro Max' -skipMacroValidation test
 ```
 
-CI runs strict SwiftLint, build and tests from `.github/workflows/ci.yml`. SwiftLint is pinned there
+CI runs strict SwiftLint, build and tests from `.github/workflows/ci.yml`. It caches the downloaded packages
+(keyed on `Package.resolved`) and, when a run fails, uploads the test results as an artifact. SwiftLint is pinned there
 (`SWIFTLINT_VERSION`); use the same version locally, and change both together. Compiler warnings are errors in our own
 code, set per target: `strict` swift settings in every `Package.swift` and the project's build settings. Never pass
 `SWIFT_TREAT_WARNINGS_AS_ERRORS` on the command line: it reaches TCA's packages and fails the build. A new package or
@@ -49,6 +49,7 @@ ImageDetails        the image details screen with the favorite button, pushed fr
   ↑
 CoreUI              DS tokens, SwiftUI components, image loader, error text
 CoreLogic | Impl | Mocks   service protocols / live services (favorites in SwiftData) / test doubles
+CoreTracker | Impl | Mocks   events + TrackerService / providers (Log, empty Firebase) / test doubles
 CoreAPI | Impl | Stubs | Mocks   API protocols / NASA over URLSession / offline stubs / test doubles
 CoreAssets          String Catalogs + `L10n`, `SystemImage`
 CoreBase            models, AppError, Log, Global… helpers (no dependencies)
@@ -69,6 +70,13 @@ CoreBase            models, AppError, Log, Global… helpers (no dependencies)
 - Shared data that several screens show (favorites) is followed as an `AsyncStream` of the whole list, never read
   once, so a change on one screen shows on the others.
 - Each tab owns its `NavigationStack`; tapping the open tab sends its `popToRoot`.
+- Tracking: an event is an enum case in `CoreTracker` (`.ui`, `.error`, `.product`); its associated values are its
+  parameters, plain values and never personal data (search sends the query's length, not its text). Names are
+  snake_case object_action and never change. Every screen passes its `ScreenTrack` to `BaseContentView(screen:)`,
+  which sends `screen_view`; `Toast` and `HeaderMessage` send `error_shown`; reducers send product events through
+  their module's `trackerClient`, and their tests check them with `TrackerServiceMock`. `TrackerServiceImpl` sends
+  every event to each provider: the `Log` (category `tracker`, read with `log show --info`) and an empty
+  `FirebaseTrackerProvider` that says how to add Firebase in `CoreTrackerImpl` only.
 - User-facing text comes from `L10n` (CoreAssets), never a literal in a view. One catalog per owner: `coreui`,
   `errors` (read only by `AppError+Strings`), one per feature. Add the catalog entry, then its `L10n` accessor.
 - SF Symbols are `SystemImage` cases, drawn with `Image(systemImage:)` / `Label(_:systemImage:)`.

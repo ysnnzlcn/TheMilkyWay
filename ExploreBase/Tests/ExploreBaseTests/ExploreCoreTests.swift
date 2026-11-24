@@ -7,6 +7,7 @@ import ComposableArchitecture
 import CoreAPI
 import CoreAPIMocks
 import CoreBase
+import CoreTrackerMocks
 import ImageDetails
 import Testing
 @testable import ExploreBase
@@ -15,6 +16,7 @@ import Testing
 struct ExploreCoreTests {
 
     private let clock = TestClock()
+    private let tracker = TrackerServiceMock()
 
     // MARK: First page
 
@@ -107,6 +109,26 @@ struct ExploreCoreTests {
             $0.hasLoaded = true
         }
         #expect(await api.requests == [SearchImagesRequest(query: "moon", page: 1)])
+        await store.finish()
+        // Only the length of what was typed, never the text.
+        #expect(tracker.events == [.product(.search(queryLength: 4))])
+    }
+
+    @Test func firstAppearAndRetryAreNotTrackedAsSearches() async {
+        var failed = ExploreCore.State()
+        failed.requestedQuery = "galaxy"
+        failed.loadError = .network(.offline)
+
+        for (state, action) in [(ExploreCore.State(), ExploreCore.Action.onFirstAppear), (failed, .onRetryTap)] {
+            let store = makeTestStore(state: state)
+            store.exhaustivity = .off(showSkippedAssertions: false)
+            // Off: only what is tracked matters here; these loads are tested above.
+
+            await store.send(action)
+            await store.finish()
+        }
+
+        #expect(tracker.events.isEmpty)
     }
 
     @Test func clearingSearchReturnsToFeaturedTopic() async {
@@ -127,6 +149,9 @@ struct ExploreCoreTests {
             $0.images = Self.images(["1"])
             $0.hasLoaded = true
         }
+        await store.finish()
+        // Back to the featured topic: not a search.
+        #expect(tracker.events.isEmpty)
     }
 
     @Test func newSearchCancelsTheRunningOne() async {
@@ -135,9 +160,10 @@ struct ExploreCoreTests {
         let api = SlowImageSearchApi(clock: clock) { $0.query == "moon" ? moon : galaxy }
         let store = TestStore(initialState: ExploreCore.State()) {
             ExploreCore()
-        } withDependencies: {
+        } withDependencies: { [tracker] in
             $0.continuousClock = clock
             $0.imageSearchApiClient = ImageSearchApiClient(api: { api })
+            $0.trackerClient = TrackerClient(service: { tracker })
         }
 
         await store.send(.onFirstAppear) {
@@ -234,9 +260,10 @@ struct ExploreCoreTests {
     ) -> TestStoreOf<ExploreCore> {
         TestStore(initialState: state) {
             ExploreCore()
-        } withDependencies: {
+        } withDependencies: { [tracker] in
             $0.continuousClock = clock
             $0.imageSearchApiClient = ImageSearchApiClient(api: { api })
+            $0.trackerClient = TrackerClient(service: { tracker })
         }
     }
 

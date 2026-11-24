@@ -10,7 +10,8 @@ extension AppInterface {
     @MainActor
     static func setupImageDetailsModule() {
         ImageDetails.imageDetailsImports = ImageDetailsImportsImpl(
-            favoritesService: mainTargetImports.favoritesService
+            favoritesService: mainTargetImports.favoritesService,
+            trackerService: mainTargetImports.trackerService
         )
     }
 }

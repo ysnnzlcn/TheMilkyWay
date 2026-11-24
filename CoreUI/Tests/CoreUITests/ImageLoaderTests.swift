@@ -60,6 +60,16 @@ struct ImageLoaderTests {
         #expect(image == nil)
     }
 
+    @Test func networkFailureReturnsNilAndCachesNothing() async {
+        ImageStubURLProtocol.stub(failure: .notConnectedToInternet)
+        let loader = makeLoader()
+
+        let image = await loader.image(for: url, maxPixelSize: 100)
+
+        #expect(image == nil)
+        #expect(loader.cachedImage(for: url, maxPixelSize: 100) == nil)
+    }
+
     @Test func invalidDataReturnsNil() async {
         ImageStubURLProtocol.stub(status: 200, data: Data("not an image".utf8))
 
@@ -84,6 +94,7 @@ private final class ImageStubURLProtocol: URLProtocol, @unchecked Sendable {
     private struct State: Sendable {
         var status = 200
         var data = Data()
+        var failure: URLError.Code?
         var requestsCount = 0
     }
 
@@ -97,14 +108,23 @@ private final class ImageStubURLProtocol: URLProtocol, @unchecked Sendable {
         state.withLock { $0 = State(status: status, data: data) }
     }
 
+    /// The request fails before any answer, e.g. no connection.
+    static func stub(failure: URLError.Code) {
+        state.withLock { $0 = State(failure: failure) }
+    }
+
     override static func canInit(with request: URLRequest) -> Bool { true }
 
     override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
-        let (status, data) = Self.state.withLock { state in
+        let (status, data, failure) = Self.state.withLock { state in
             state.requestsCount += 1
-            return (state.status, state.data)
+            return (state.status, state.data, state.failure)
+        }
+        if let failure {
+            client?.urlProtocol(self, didFailWithError: URLError(failure))
+            return
         }
         let response = request.url.flatMap {
             HTTPURLResponse(url: $0, statusCode: status, httpVersion: nil, headerFields: nil)

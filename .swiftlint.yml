@@ -52,6 +52,8 @@ included:
   - CoreUI/Tests
   - CoreLogic/Sources
   - CoreLogic/Tests
+  - CoreTracker/Sources
+  - CoreTracker/Tests
   - ExploreBase/Sources
   - ExploreBase/Tests
   - FavoritesBase/Sources

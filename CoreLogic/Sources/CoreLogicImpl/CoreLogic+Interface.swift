@@ -36,23 +36,32 @@ public struct CoreLogicExportsImpl: CoreLogicExports {
         CoreLogicExportsImpl(favoritesService: FavoritesServiceUnimplemented())
     }
 
-    /// Saved on the phone, with a versioned schema so later model changes migrate the store. If the store can't be
-    /// opened, favorites are kept in memory so the app still works; they then last until the app closes.
+    /// Saved on the phone. If the store can't be opened, favorites are kept in memory so the app still works; they
+    /// then last until the app closes.
     @Sendable static func makeFavoritesContainer() -> ModelContainer {
-        let schema = Schema(versionedSchema: FavoritesSchemaV1.self)
         do {
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: FavoritesMigrationPlan.self,
-                configurations: ModelConfiguration("Favorites", schema: schema)
-            )
+            return try openFavoritesStore(ModelConfiguration("Favorites", schema: favoritesSchema))
         } catch {
             Log.error("Favorites store could not be opened, using memory: \(type(of: error))", .favorites)
         }
         do {
-            return try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            return try openFavoritesStore(ModelConfiguration(isStoredInMemoryOnly: true))
         } catch {
             fatalError("An in-memory SwiftData store could not be created: \(error)")
         }
+    }
+
+    /// The favorites store with its versioned schema and migration plan, so later model changes migrate stores
+    /// already on phones. `configuration` says where it lives (tests use a temporary folder).
+    static func openFavoritesStore(_ configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: favoritesSchema,
+            migrationPlan: FavoritesMigrationPlan.self,
+            configurations: configuration
+        )
+    }
+
+    private static var favoritesSchema: Schema {
+        Schema(versionedSchema: FavoritesSchemaV1.self)
     }
 }

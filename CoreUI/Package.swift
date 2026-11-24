@@ -14,6 +14,7 @@ let package = Package(
     dependencies: [
         .package(path: "../CoreAssets"),
         .package(path: "../CoreBase"),
+        .package(path: "../CoreTracker"),
     ],
     targets: [
         .target(
@@ -21,6 +22,7 @@ let package = Package(
             dependencies: [
                 .product(name: "CoreAssets", package: "CoreAssets"),
                 .product(name: "CoreBase", package: "CoreBase"),
+                .product(name: "CoreTracker", package: "CoreTracker"),
             ],
             swiftSettings: strict
         ),
@@ -30,6 +32,7 @@ let package = Package(
                 "CoreUI",
                 .product(name: "CoreAssets", package: "CoreAssets"),
                 .product(name: "CoreBase", package: "CoreBase"),
+                .product(name: "CoreTracker", package: "CoreTracker"),
             ],
             swiftSettings: strict
         ),

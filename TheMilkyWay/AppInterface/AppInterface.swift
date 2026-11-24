@@ -6,9 +6,11 @@
 import CoreAPI
 import CoreBase
 import CoreLogic
+import CoreTracker
 
-// Private import: only the app target may see implementations.
+// Private imports: only the app target may see implementations.
 private import CoreLogicImpl
+private import CoreTrackerImpl
 
 @MainActor
 private(set) var mainTargetImports: MainTargetImports = .unimplemented()
@@ -35,8 +37,10 @@ enum AppInterface {
         setupCoreLogicModule()
         mainTargetImports = MainTargetImports(
             apiManager: apiManager,
-            favoritesService: CoreLogicImpl.coreLogicExports.favoritesService
+            favoritesService: CoreLogicImpl.coreLogicExports.favoritesService,
+            trackerService: CoreTrackerImpl.coreTrackerExports.trackerService
         )
+        setupCoreUIModule()
         setupExploreBaseModule()
         setupImageDetailsModule()
         setupFavoritesBaseModule()
@@ -49,9 +53,14 @@ enum AppInterface {
 struct MainTargetImports {
     let apiManager: ApiManager
     let favoritesService: FavoritesService
+    let trackerService: TrackerService
 
     @MainActor
     static func unimplemented() -> Self {
-        MainTargetImports(apiManager: ApiManagerUnimplemented(), favoritesService: FavoritesServiceUnimplemented())
+        MainTargetImports(
+            apiManager: ApiManagerUnimplemented(),
+            favoritesService: FavoritesServiceUnimplemented(),
+            trackerService: TrackerServiceUnimplemented()
+        )
     }
 }

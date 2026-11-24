@@ -5,14 +5,16 @@
 
 import CoreAssets
 import CoreBase
+import CoreTracker
 import SwiftUI
 
 public extension View {
 
     /// Shows `model` at the bottom; `nil` hides it.
     func toast(model: ToastUIModel?) -> some View {
-        overlay(alignment: .bottom) {
-            ToastView(model: model)
+        // The screen comes from the `BaseContentView` inside, for tracking.
+        overlayPreferenceValue(ShownScreenKey.self, alignment: .bottom) { screen in
+            ToastView(model: model, screen: screen)
         }
     }
 }
@@ -44,19 +46,26 @@ public struct ToastUIModel: Equatable {
 
     fileprivate let text: String
     fileprivate let status: Status
+    /// What went wrong, for tracking; `nil` for a confirmation.
+    fileprivate let error: AppError?
     /// Called when the toast goes away: after its time, or on a tap or swipe down. The screen clears its model.
     fileprivate let onDismiss: () -> Void
 
+    /// A confirmation, or another toast with its own text.
     public init(text: String, status: Status, onDismiss: @escaping () -> Void) {
         self.text = text
         self.status = status
+        self.error = nil
         self.onDismiss = onDismiss
     }
 
     /// The error toast with the error's copy (`AppError+Strings`). `nil` when there is no error.
     public init?(error: AppError?, onDismiss: @escaping () -> Void) {
         guard let error else { return nil }
-        self.init(text: error.copy.toastText, status: error.copy.toastStatus, onDismiss: onDismiss)
+        self.text = error.copy.toastText
+        self.status = error.copy.toastStatus
+        self.error = error
+        self.onDismiss = onDismiss
     }
 
     public static func == (lhs: ToastUIModel, rhs: ToastUIModel) -> Bool {
@@ -69,6 +78,8 @@ public struct ToastUIModel: Equatable {
 struct ToastView: View {
 
     let model: ToastUIModel?
+    /// The screen the toast is on, for tracking.
+    var screen: ScreenTrack?
 
     var body: some View {
         ZStack {
@@ -103,7 +114,7 @@ struct ToastView: View {
         .animation(.easeInOut(duration: DS.Motion.base), value: model)
     }
 
-    /// Announced for VoiceOver (errors first, with high priority) and logged.
+    /// Announced for VoiceOver (errors first, with high priority) and logged; an error toast is also tracked.
     private func report(_ model: ToastUIModel) {
         guard model.status.isError else {
             AccessibilityNotification.Announcement(model.text).post()
@@ -114,6 +125,9 @@ struct ToastView: View {
         announcement.accessibilitySpeechAnnouncementPriority = .high
         AccessibilityNotification.Announcement(announcement).post()
         Log.warning("Error toast: \(model.text)", .messages)
+        if let error = model.error {
+            trackFromUI(.error(.errorShown(error: error.trackingName, presentation: .toast, screen: screen)))
+        }
     }
 }
 

@@ -6,6 +6,7 @@
 import ComposableArchitecture
 import CoreAssets
 import CoreBase
+import CoreTracker
 import CoreUI
 import ImageDetails
 import SwiftUI
@@ -22,7 +23,7 @@ public struct ExploreView: View {
 
     public var body: some View {
         NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            BaseContentView(mode: store.viewMode) {
+            BaseContentView(screen: .explore, mode: store.viewMode) {
                 InfiniteImageGrid(
                     items: cards,
                     isLoadingMore: store.isLoadingMore,
