@@ -9,10 +9,24 @@ let package = Package(
         .library(name: "CoreUI", targets: ["CoreUI"]),
     ],
     dependencies: [
+        .package(path: "../CoreAssets"),
         .package(path: "../CoreBase"),
     ],
     targets: [
-        .target(name: "CoreUI", dependencies: [.product(name: "CoreBase", package: "CoreBase")]),
-        .testTarget(name: "CoreUITests", dependencies: ["CoreUI"]),
+        .target(
+            name: "CoreUI",
+            dependencies: [
+                .product(name: "CoreAssets", package: "CoreAssets"),
+                .product(name: "CoreBase", package: "CoreBase"),
+            ]
+        ),
+        .testTarget(
+            name: "CoreUITests",
+            dependencies: [
+                "CoreUI",
+                .product(name: "CoreAssets", package: "CoreAssets"),
+                .product(name: "CoreBase", package: "CoreBase"),
+            ]
+        ),
     ]
 )

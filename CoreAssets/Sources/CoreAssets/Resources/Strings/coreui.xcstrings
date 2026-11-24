@@ -1,0 +1,18 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "toast.errorAnnouncement" : {
+      "comment" : "VoiceOver announcement for an error toast. %@ is the toast's text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error, %@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

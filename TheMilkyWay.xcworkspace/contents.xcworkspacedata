@@ -5,6 +5,9 @@
       location = "group:CoreAPI">
    </FileRef>
    <FileRef
+      location = "group:CoreAssets">
+   </FileRef>
+   <FileRef
       location = "group:CoreBase">
    </FileRef>
    <FileRef
