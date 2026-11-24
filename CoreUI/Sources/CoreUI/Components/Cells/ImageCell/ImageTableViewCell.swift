@@ -20,6 +20,7 @@ public final class ImageTableViewCell: UITableViewCell, Reusable {
 
     public override func prepareForReuse() {
         super.prepareForReuse()
+        nasaImageView.cancelLoading()
         nasaImageView.image = nil
     }
 

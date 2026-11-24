@@ -1,12 +1,13 @@
 //
 //  HomeViewModel.swift
-//  
+//
 //
 //  Created by Yasin Nazlican on 18.11.2021.
 //
 
 import Combine
 import Core
+import CoreUI
 
 public enum HomeViewModelState {
 
@@ -15,12 +16,13 @@ public enum HomeViewModelState {
     case error(_ error: String)
 }
 
+@MainActor
 public final class HomeViewModel {
 
     // MARK: Private Variables
 
-    private let service: NASAServices
-    private var cancellables = Set<AnyCancellable>()
+    private let service: any NASAServices
+    private var loadTask: Task<Void, Never>?
 
     // MARK: Public Variables
 
@@ -29,40 +31,43 @@ public final class HomeViewModel {
 
     // MARK: Life-Cycle
 
-    public init(service: NASAServices) {
+    public init(service: any NASAServices) {
         self.service = service
     }
 
     // MARK: Public Methods
 
     public func didLoad() {
-        getImages()
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in
+            await self?.getImages()
+        }
     }
 
     public func itemSelected(at index: Int) {
         state = .itemSelected(items[index])
     }
+
+    isolated deinit {
+        loadTask?.cancel()
+    }
 }
 
 // MARK: Networking
 
-extension HomeViewModel {
+public extension HomeViewModel {
 
-    private func getImages() {
+    func getImages() async {
         state = .toggleLoading(true)
-        service
-            .searchImages()
-            .sink(receiveCompletion: { [weak self] completion in
-                switch completion {
-                case .failure(let error):
-                    self?.state = .error(error.customDescription)
+        let result = await service.searchImages()
+        guard !Task.isCancelled else { return }
 
-                case .finished:
-                    self?.state = .toggleLoading(false)
-                }
-            }, receiveValue: { [weak self] response in
-                self?.items = response.collection.items
-            })
-            .store(in: &cancellables)
+        state = .toggleLoading(false)
+        switch result {
+        case .success(let response):
+            items = response.collection.items
+        case .failure(let error):
+            state = .error(error.message)
+        }
     }
 }

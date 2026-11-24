@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 public enum GlobalLoadingView {
 
     // MARK: Cases

@@ -47,7 +47,7 @@ final class HomeTableViewDataSource: BaseDiffableDataSource<HomeCellType> {
     }
 }
 
-enum HomeCellType {
+enum HomeCellType: Sendable {
 
     case imageCell(_ cellViewModel: ImageTableCellViewModel)
 }

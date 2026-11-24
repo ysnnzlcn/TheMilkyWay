@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public class Coordinator {
 
     public private(set) var childCoordinators: [Coordinator] = []
@@ -42,7 +43,7 @@ public class Coordinator {
 
 extension Coordinator: Equatable {
 
-    public static func == (lhs: Coordinator, rhs: Coordinator) -> Bool {
+    public nonisolated static func == (lhs: Coordinator, rhs: Coordinator) -> Bool {
         return lhs === rhs
     }
 }

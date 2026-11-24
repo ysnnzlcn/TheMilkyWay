@@ -11,6 +11,7 @@ import CoreUI
 import Foundation
 import UIKit
 
+@MainActor
 public final class ImageDetailsViewModel {
 
     // MARK: Private Variables
