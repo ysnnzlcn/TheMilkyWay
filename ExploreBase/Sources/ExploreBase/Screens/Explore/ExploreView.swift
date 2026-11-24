@@ -36,7 +36,12 @@ public struct ExploreView: View {
             .headerMessage(message)
             .toast(model: ToastUIModel(error: store.error) { store.send(.onToastDismiss) })
             .navigationTitle(L10n.Explore.title)
-            .searchable(text: $store.query.sending(\.onQueryChange), prompt: L10n.Explore.searchPrompt)
+            // Pinned under the title: shown from the first launch, also while the grid scrolls.
+            .searchable(
+                text: $store.query.sending(\.onQueryChange),
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: L10n.Explore.searchPrompt
+            )
             .onFirstAppear { store.send(.onFirstAppear) }
         } destination: { store in
             switch store.case {
